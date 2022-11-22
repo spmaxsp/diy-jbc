@@ -78,17 +78,24 @@ void isr(){
 //  #################################################################################
 
 void loop() {
-    if (Serial.available() > 0) {
-      set_temperature = Serial.parseInt();
-    }
   
-  if(state.SLEEP){
-    set_temperature = 100;
+
+  
+  if(state.USER_DISABLE_HEATER or state.READING_ERROR){
+    set_temperature = 0;
   }
-    
+  else if(state.HIBERNATE){
+    set_temperature = HIBERNATE_TEMP;
+  }
+  else if(state.SLEEP){
+    set_temperature = SLEEP_TEMP;
+  }
+  else {
+    set_temperature = state.userTemp;
+  }
 
   if(!jbc.get_heating_phase()){
-    if(milies() - jbc.get_last_heat() > SLEEP_TEMP){
+    if(millies() - jbc.get_last_heat() > SLEEP_TEMP){
       is_temperature = temperature.messureTemp(last_heat);
       if(state.READING_ERROR){
         Serial.println("READING_ERROR");
