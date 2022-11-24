@@ -1,9 +1,9 @@
-#ifndef TEMPERATURE_H
-#define TEMPERATURE_H
+#ifndef TEMPERATURE_H_
+#define TEMPERATURE_H_
 #include <Arduino.h>
 #include <max6675.h>
 #include "state.h"
-#include "timers.h"
+
 
 class Temperature{
   private:

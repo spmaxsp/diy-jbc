@@ -1,5 +1,5 @@
-#ifndef STATE_H
-#define STATE_H
+#ifndef STATE_H_
+#define STATE_H_
 
 typedef struct {
     double userTemp = 0;    

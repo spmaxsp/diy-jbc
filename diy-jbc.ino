@@ -95,8 +95,8 @@ void loop() {
   }
 
   if(!jbc.get_heating_phase()){
-    if(millies() - jbc.get_last_heat() > SLEEP_TEMP){
-      is_temperature = temperature.messureTemp(last_heat);
+    if(millis() - jbc.get_last_heat() > SLEEP_TEMP){
+      is_temperature = temperature.messureTemp();
       if(state.READING_ERROR){
         Serial.println("READING_ERROR");
       }

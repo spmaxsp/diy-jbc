@@ -1,5 +1,5 @@
-#ifndef JBC_H
-#define JBC_H
+#ifndef JBC_H_
+#define JBC_H_
 #include <Arduino.h>
 
 class Jbc {  

@@ -24,7 +24,7 @@ void Jbc::run_heating_phase() {
 void Jbc::end_heaing_phase() {
   this->heating_phase = false;
   digitalWrite(GATE_PIN, LOW);
-  this->last_heat = milies();
+  this->last_heat = millis();
 }
 
 bool Jbc::get_heating_phase(){
