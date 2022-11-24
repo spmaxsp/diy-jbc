@@ -4,7 +4,7 @@
 #include "jbc.h"
 #include "temperature.h"
 #include "display.h"
-#include "serial.h"
+#include "ser_interface.h"
 #include "input.h"
 
 #include "state.h"
@@ -55,6 +55,7 @@ State state;
 
 Jbc jbc(MAX_CYCLES);
 Temperature temperature(&thermocouple, &state);
+SerialInterface ser_interface(&Serial , &state);
 
 void setup() {
   
