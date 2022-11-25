@@ -13,6 +13,7 @@ class SerialInterface {
     State *state;
     
     void phrase_command();
+    bool teststr(char input[], int start, char search[]);
 
   public:  
     SerialInterface(Stream* serStreamRef, State* state);
