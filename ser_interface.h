@@ -11,6 +11,8 @@ class SerialInterface {
     int buf_cursor;
     Stream *serStreamRef;
     State *state;
+
+    bool graph_enable;
     
     void phrase_command();
     bool teststr(char input[], int start, char search[]);

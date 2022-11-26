@@ -4,6 +4,7 @@ SerialInterface::SerialInterface(Stream* serStreamRef, State* state){
   this->serStreamRef = serStreamRef;
   this->state = state;
   this->buf_cursor = 0;
+  this->graph_enable = false;
 }
 
 void SerialInterface::phrase_command(){
@@ -25,6 +26,14 @@ void SerialInterface::phrase_command(){
     char cmd_enable[] = "ENABLE";
 
     char cmd_disable[] = "DISABLE";
+
+    char cmd_set_eeprom[] = "SAVE";
+
+    char cmd_print_settings[] = "SETTINGS";  
+
+    char cmd_start_graph[] = "START"; 
+    
+    char cmd_stop_graph[] = "STOP"; 
 
     if (this->teststr(this->buffer, 0, cmd_set)) {
       if (this->teststr(this->buffer, strlen(cmd_set), cmd_temp)){
@@ -56,6 +65,18 @@ void SerialInterface::phrase_command(){
 
     }
     else if (this->teststr(this->buffer, 0, cmd_disable)) {
+      
+    }
+    else if (this->teststr(this->buffer, 0, cmd_set_eeprom)) {
+      
+    }
+    else if (this->teststr(this->buffer, 0, cmd_print_settings)) {
+      
+    }
+    else if (this->teststr(this->buffer, 0, cmd_start_graph)) {
+      
+    }
+    else if (this->teststr(this->buffer, 0, cmd_stop_graph)) {
       
     }
    
