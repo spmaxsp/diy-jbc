@@ -37,7 +37,16 @@ void SerialInterface::phrase_command(){
 
     if (this->teststr(this->buffer, 0, cmd_set)) {
       if (this->teststr(this->buffer, strlen(cmd_set), cmd_temp)){
+        int start_char = strlen(cmd_set)+strlen(cmd_temp);
+        int temp_read = this->read_number(this->buffer, start_char);
         
+        if (temp_read >= 0 && temp_read <= 450){
+          this->state->userTemp = 1.0 * temp_read;
+          this->serStreamRef->println("OK");
+        }
+        else {      
+          this->serStreamRef->println("INPUT NOT VALID");        
+        } 
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_p)){
         
@@ -62,10 +71,12 @@ void SerialInterface::phrase_command(){
       }
     }
     else if (this->teststr(this->buffer, 0, cmd_enable)) {
-
+      this->state->USER_DISABLE_HEATER = false;
+      this->serStreamRef->println("OK");     
     }
     else if (this->teststr(this->buffer, 0, cmd_disable)) {
-      
+      this->state->USER_DISABLE_HEATER = true;
+      this->serStreamRef->println("OK");
     }
     else if (this->teststr(this->buffer, 0, cmd_set_eeprom)) {
       
@@ -74,16 +85,39 @@ void SerialInterface::phrase_command(){
       
     }
     else if (this->teststr(this->buffer, 0, cmd_start_graph)) {
-      
+      this->graph_enable = true;
+      this->serStreamRef->println("OK");
     }
     else if (this->teststr(this->buffer, 0, cmd_stop_graph)) {
-      
+      this->graph_enable = false;
+      this->serStreamRef->println("OK");
     }
    
 }
 
+int SerialInterface::read_number(char input[], int start){
+  int index = 0;
+  int output = 0; 
+  while (isdigit(input[index+start])) {
+    output = output + int(input[index+start] - '0') * pow(10, index);
+    index++;
+  }
+  return output;
+}
+
 bool SerialInterface::teststr(char input[], int start, char search[]){
   return strncmp(input+start, search, strlen(search));
+}
+
+void SerialInterface::print_graph(double is_temperature, double set_temperature, double pid_output){
+  if (this->graph_enable){
+    this->serStreamRef->print(is_temperature);
+    this->serStreamRef->print('\t');
+    this->serStreamRef->print(set_temperature);
+    this->serStreamRef->print('\t');
+    this->serStreamRef->print(pid_output);
+    this->serStreamRef->print('\n');
+  }
 }
 
 void SerialInterface::read_loop(){
