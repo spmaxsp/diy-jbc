@@ -80,7 +80,7 @@ void isr(){
 
 void loop() {
   
-
+  ser_interface.read_loop();
   
   if(state.USER_DISABLE_HEATER or state.READING_ERROR){
     set_temperature = 0;
@@ -103,17 +103,10 @@ void loop() {
       }
       else{
         myPID.run();
+        ser_interface.print_graph(is_temperature, set_temperature, pid_output);
         jbc.set_power_target(pid_output);
         jbc.run_heating_phase();
       }
-    }
-          
-    Serial.print(is_temperature);
-    Serial.print('\t');
-    Serial.print(set_temperature);
-    Serial.print('\t');
-    Serial.print(pid_output);
-    Serial.print('\n');
-    
+    }    
   }
 }
