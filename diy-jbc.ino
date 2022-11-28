@@ -6,6 +6,7 @@
 #include "display.h"
 #include "ser_interface.h"
 #include "input.h"
+#include "led.h"
 
 #include "state.h"
 
@@ -14,7 +15,6 @@
 #define thermoCS  7
 #define thermoCLK 6
 
-#define LED_D     5
 
 #define ZERO_CROSSING_PIN  2 //INT0 (pullup)
 #define GATE_PIN    4
@@ -42,7 +42,6 @@
 
 double is_temperature, set_temperature, pid_output;
 
-
 //  #################################################################################
 //  #                               SETUP                                           #
 //  #################################################################################
@@ -56,9 +55,13 @@ State state;
 Jbc jbc(MAX_CYCLES);
 Temperature temperature(&thermocouple, &state);
 SerialInterface ser_interface(&Serial , &state);
+StatusLed status_led;
 
 void setup() {
-  
+
+  jbc.begin(ZERO_CROSSING_PIN, GATE_PIN);
+  status_led.begin();
+    
   Serial.begin(9600);
   delay(500);
 
@@ -104,6 +107,7 @@ void loop() {
       else{
         myPID.run();
         ser_interface.print_graph(is_temperature, set_temperature, pid_output);
+        status_led.update(is_temperature);
         jbc.set_power_target(pid_output);
         jbc.run_heating_phase();
       }
