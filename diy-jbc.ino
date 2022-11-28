@@ -15,10 +15,6 @@
 #define thermoCS  7
 #define thermoCLK 6
 
-
-#define ZERO_CROSSING_PIN  2 //INT0 (pullup)
-#define GATE_PIN    4
-
 #define stationIN A5 //(pullup)
 
 #define ROT_BUTTON 9
@@ -59,7 +55,7 @@ StatusLed status_led;
 
 void setup() {
 
-  jbc.begin(ZERO_CROSSING_PIN, GATE_PIN);
+  jbc.begin();
   status_led.begin();
     
   Serial.begin(9600);

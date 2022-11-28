@@ -8,9 +8,7 @@ Jbc::Jbc(int max_cycles){
   this->heating_phase = false;
 }
 
-void Jbc::begin(int ZERO_CROSSING_PIN, int GATE_PIN) {
-  this->ZERO_CROSSING_PIN = ZERO_CROSSING_PIN;
-  this->GATE_PIN = GATE_PIN;
+void Jbc::begin() {
   pinMode(GATE_PIN, OUTPUT);
   digitalWrite(GATE_PIN, LOW);
   pinMode(ZERO_CROSSING_PIN, INPUT_PULLUP);
