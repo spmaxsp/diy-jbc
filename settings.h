@@ -29,15 +29,17 @@ class SettingsEEPROM{
   private: 
   	int eeAddress;
     bool check_eeprom(MemObj mem_object); 
+    void change_pid_changegain_flagg(MemObj mem_object);
     
   public:  
     SettingsEEPROM();
     void read_settings();
     void save_settings();
+    void gains_set();
 
-    float KP;
-    float KI;
-    float KD;
+    double KP;
+    double KI;
+    double KD;
 
     double TC_A;
     double TC_B;
@@ -47,6 +49,8 @@ class SettingsEEPROM{
     int SLEEP_TEMP;
     int HIBERNATE_DELAY;
     int HIBERNATE_TEMP; 
+
+    bool new_pid_gains;
 };
 
 #endif

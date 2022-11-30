@@ -12,6 +12,7 @@ SettingsEEPROM::SettingsEEPROM(){
   SLEEP_TEMP = 150;
   HIBERNATE_DELAY = 3 * 60;
   HIBERNATE_TEMP = 0; 
+  new_pid_gains = false;
 }
 
 bool SettingsEEPROM::check_eeprom(MemObj mem_object){
@@ -23,12 +24,30 @@ bool SettingsEEPROM::check_eeprom(MemObj mem_object){
   }
 }
 
+void SettingsEEPROM::change_pid_changegain_flagg(MemObj mem_object){
+  if (this->KP != mem_object.KP){
+    this->new_pid_gains = true;
+  }
+  if (this->KI != mem_object.KI){
+    this->new_pid_gains = true;
+  }
+  if (this->KD != mem_object.KD){
+    this->new_pid_gains = true;
+  }
+}
+
+void SettingsEEPROM::gains_set(){
+  this->new_pid_gains = false;
+}
+
 void SettingsEEPROM::read_settings(){
   MemObj mem_object;
 
   EEPROM.get(EE_ADRESS, mem_object);
   
   if(this->check_eeprom(mem_object)){
+    this->change_pid_changegain_flagg(mem_object);
+    
     this->KP = mem_object.KP;
     this->KI = mem_object.KI;
     this->KD = mem_object.KD;
