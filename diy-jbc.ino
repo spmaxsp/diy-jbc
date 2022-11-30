@@ -7,6 +7,7 @@
 #include "ser_interface.h"
 #include "input.h"
 #include "led.h"
+#include "settings.h"
 
 #include "state.h"
 
@@ -23,18 +24,10 @@
 
 //         ------Variables for Temperature Controll------
 #define MAX_CYCLES 30
-#define SLEEP_TEMP 250  //wait bevore reading tc
+#define SLEEP_READ 250  //wait bevore reading tc
 
 #define OUTPUT_MIN 0
 #define OUTPUT_MAX 100
-#define KP 4.4
-#define KI 0.9
-#define KD 0.05
-
-#define SLEEP_DELAY 1.5 * 60
-#define SLEEP_TEMP 150
-#define HIBERNATE_DELAY 3 * 60
-#define HIBERNATE_TEMP 0
 
 double is_temperature, set_temperature, pid_output;
 
@@ -42,9 +35,10 @@ double is_temperature, set_temperature, pid_output;
 //  #                               SETUP                                           #
 //  #################################################################################
 
+SettingsEEPROM settings;
 
 MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
-AutoPID myPID(&is_temperature, &set_temperature, &pid_output, OUTPUT_MIN, OUTPUT_MAX, KP, KI, KD);
+AutoPID myPID(&is_temperature, &set_temperature, &pid_output, OUTPUT_MIN, OUTPUT_MAX, settings.KP, settings.KI, settings.KD);
 
 State state;
 
@@ -54,6 +48,8 @@ SerialInterface ser_interface(&Serial , &state);
 StatusLed status_led;
 
 void setup() {
+
+  settings.read_settings();  
 
   jbc.begin();
   status_led.begin();
@@ -78,6 +74,10 @@ void isr(){
 //  #################################################################################
 
 void loop() {
+  if(settings.new_pid_gains){
+    myPID.setGains(settings.KP, settings.KI, settings.KD);
+    settings.gains_set();
+  }
   
   ser_interface.read_loop();
   
@@ -85,17 +85,17 @@ void loop() {
     set_temperature = 0;
   }
   else if(state.HIBERNATE){
-    set_temperature = HIBERNATE_TEMP;
+    set_temperature = settings.HIBERNATE_TEMP;
   }
   else if(state.SLEEP){
-    set_temperature = SLEEP_TEMP;
+    set_temperature = settings.SLEEP_TEMP;
   }
   else {
     set_temperature = state.userTemp;
   }
 
   if(!jbc.get_heating_phase()){
-    if(millis() - jbc.get_last_heat() > SLEEP_TEMP){
+    if(millis() - jbc.get_last_heat() > SLEEP_READ){
       is_temperature = temperature.messureTemp();
       if(state.READING_ERROR){
         Serial.println("READING_ERROR");
