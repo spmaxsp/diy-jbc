@@ -44,7 +44,7 @@ State state;
 
 Jbc jbc(MAX_CYCLES);
 Temperature temperature(&thermocouple, &state, &settings);
-SerialInterface ser_interface(&Serial , &state);
+SerialInterface ser_interface(&Serial , &state, &settings);
 StatusLed status_led;
 
 void setup() {

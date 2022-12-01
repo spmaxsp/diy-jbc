@@ -1,6 +1,6 @@
 #include "temperature.h"
 
-Temperature::Temperature(MAX6675* thermocouple, State* state, SettingsEEPROM settings*){
+Temperature::Temperature(MAX6675* thermocouple, State* state, SettingsEEPROM* settings){
   this->thermocouple = thermocouple;
   this->state = state;
   this->settings = settings;

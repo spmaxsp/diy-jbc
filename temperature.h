@@ -14,7 +14,7 @@ class Temperature{
       SettingsEEPROM* settings;
 
   public:
-      Temperature(MAX6675* thermocouple, State* state, SettingsEEPROM settings*);
+      Temperature(MAX6675* thermocouple, State* state, SettingsEEPROM* settings);
       bool testTemp();
       int messureTemp();
 };

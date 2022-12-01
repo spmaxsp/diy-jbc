@@ -1,6 +1,6 @@
 #include "ser_interface.h"
 
-SerialInterface::SerialInterface(Stream* serStreamRef, State* state, SettingsEEPROM settings*){
+SerialInterface::SerialInterface(Stream* serStreamRef, State* state, SettingsEEPROM* settings){
   this->serStreamRef = serStreamRef;
   this->state = state;
   this->settings = settings;
