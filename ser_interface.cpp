@@ -42,25 +42,32 @@ void SerialInterface::phrase_command(){
         this->read_double(this->buffer, start_char, 0, 450, &(this->state->userTemp));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_p)){
-        
+        int start_char = strlen(cmd_set)+strlen(cmd_pid_p);
+        this->read_double(this->buffer, start_char, 0, 10, &(this->settings->KP));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_i)){
-        
+        int start_char = strlen(cmd_set)+strlen(cmd_pid_i);
+        this->read_double(this->buffer, start_char, 0, 10, &(this->settings->KI));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_d)){
-        
+        int start_char = strlen(cmd_set)+strlen(cmd_pid_d);
+        this->read_double(this->buffer, start_char, 0, 10, &(this->settings->KD));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_s_time)){
-        
+        int start_char = strlen(cmd_set)+strlen(cmd_s_time);
+        this->read_int(this->buffer, start_char, 0, 3600, &(this->settings->SLEEP_DELAY));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_h_time)){
-        
+        int start_char = strlen(cmd_set)+strlen(cmd_h_time);
+        this->read_int(this->buffer, start_char, 0, 3600, &(this->settings->HIBERNATE_DELAY));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_s_tmp)){
-        
+        int start_char = strlen(cmd_set)+strlen(cmd_s_tmp);
+        this->read_int(this->buffer, start_char, 0, 450, &(this->settings->SLEEP_TEMP));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_h_tmp)){
-        
+        int start_char = strlen(cmd_set)+strlen(cmd_h_tmp);
+        this->read_int(this->buffer, start_char, 0, 450, &(this->settings->HIBERNATE_TEMP));
       }
     }
     else if (this->teststr(this->buffer, 0, cmd_enable)) {
