@@ -1,8 +1,9 @@
 #include "ser_interface.h"
 
-SerialInterface::SerialInterface(Stream* serStreamRef, State* state){
+SerialInterface::SerialInterface(Stream* serStreamRef, State* state, SettingsEEPROM settings*){
   this->serStreamRef = serStreamRef;
   this->state = state;
+  this->settings = settings;
   this->buf_cursor = 0;
   this->graph_enable = false;
 }
@@ -79,10 +80,30 @@ void SerialInterface::phrase_command(){
       this->serStreamRef->println("OK");
     }
     else if (this->teststr(this->buffer, 0, cmd_set_eeprom)) {
-      
+      this->settings->save_settings();  
     }
     else if (this->teststr(this->buffer, 0, cmd_print_settings)) {
-      
+      this->serStreamRef->println("DUMPING SETTINGS:");
+      this->serStreamRef->print("KP:");
+      this->serStreamRef->println(this->settings->KP);
+      this->serStreamRef->print("KI:");
+      this->serStreamRef->println(this->settings->KI);
+      this->serStreamRef->print("KD:");
+      this->serStreamRef->println(this->settings->KD);
+      this->serStreamRef->print("TC_A:");
+      this->serStreamRef->println(this->settings->TC_A);
+      this->serStreamRef->print("TC_B:");
+      this->serStreamRef->println(this->settings->TC_B);
+      this->serStreamRef->print("TC_C:");
+      this->serStreamRef->println(this->settings->TC_C);
+      this->serStreamRef->print("SLEEP_DELAY:");
+      this->serStreamRef->println(this->settings->SLEEP_DELAY);
+      this->serStreamRef->print("SLEEP_TEMP:");
+      this->serStreamRef->println(this->settings->SLEEP_TEMP);
+      this->serStreamRef->print("HIBERNATE_DELAY:");
+      this->serStreamRef->println(this->settings->HIBERNATE_DELAY);
+      this->serStreamRef->print("HIBERNATE_TEMP:");
+      this->serStreamRef->println(this->settings->HIBERNATE_TEMP); 
     }
     else if (this->teststr(this->buffer, 0, cmd_start_graph)) {
       this->graph_enable = true;

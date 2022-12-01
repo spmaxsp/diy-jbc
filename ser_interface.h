@@ -11,6 +11,7 @@ class SerialInterface {
     int buf_cursor;
     Stream *serStreamRef;
     State *state;
+    SettingsEEPROM* settings;
 
     bool graph_enable;
     
@@ -19,7 +20,7 @@ class SerialInterface {
     bool teststr(char input[], int start, char search[]);
 
   public:  
-    SerialInterface(Stream* serStreamRef, State* state);
+    SerialInterface(Stream* serStreamRef, State* state, SettingsEEPROM settings*);
     void read_loop();
     void print_graph(double is_temperature, double set_temperature, double pid_output);
 };
