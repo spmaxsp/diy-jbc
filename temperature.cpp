@@ -1,8 +1,9 @@
 #include "temperature.h"
 
-Temperature::Temperature(MAX6675* thermocouple, State* state){
+Temperature::Temperature(MAX6675* thermocouple, State* state, SettingsEEPROM settings*){
   this->thermocouple = thermocouple;
   this->state = state;
+  this->settings = settings;
 }
 
 bool Temperature::testTemp(){
@@ -21,6 +22,6 @@ int Temperature::messureTemp(){
 }
 
 int Temperature::correct_temp(int raw){
-  int corrected = raw;
+  int corrected = this->settings->TC_A * raw * raw + this->settings->TC_B * raw + this->settings->TC_C;   //Ax² + Bx + C
   return(corrected);
 }

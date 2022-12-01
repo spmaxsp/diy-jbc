@@ -43,7 +43,7 @@ AutoPID myPID(&is_temperature, &set_temperature, &pid_output, OUTPUT_MIN, OUTPUT
 State state;
 
 Jbc jbc(MAX_CYCLES);
-Temperature temperature(&thermocouple, &state);
+Temperature temperature(&thermocouple, &state, &settings);
 SerialInterface ser_interface(&Serial , &state);
 StatusLed status_led;
 
