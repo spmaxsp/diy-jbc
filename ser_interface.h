@@ -17,11 +17,12 @@ class SerialInterface {
     bool graph_enable;
     
     void phrase_command();
-    int read_number(char input[], int start);
+    void read_int(char input[], int start, int min_val, int max_val, int* output);
+    void read_double(char input[], int start, double min_val, double max_val, double* output);
     bool teststr(char input[], int start, char search[]);
 
   public:  
-    SerialInterface(Stream* serStreamRef, State* state, SettingsEEPROM settings*);
+    SerialInterface(Stream* serStreamRef, State* state, SettingsEEPROM* settings);
     void read_loop();
     void print_graph(double is_temperature, double set_temperature, double pid_output);
 };

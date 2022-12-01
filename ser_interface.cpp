@@ -39,15 +39,7 @@ void SerialInterface::phrase_command(){
     if (this->teststr(this->buffer, 0, cmd_set)) {
       if (this->teststr(this->buffer, strlen(cmd_set), cmd_temp)){
         int start_char = strlen(cmd_set)+strlen(cmd_temp);
-        int temp_read = this->read_number(this->buffer, start_char);
-        
-        if (temp_read >= 0 && temp_read <= 450){
-          this->state->userTemp = 1.0 * temp_read;
-          this->serStreamRef->println("OK");
-        }
-        else {      
-          this->serStreamRef->println("INPUT NOT VALID");        
-        } 
+        this->read_double(this->buffer, start_char, 0, 450, &(this->state->userTemp));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_p)){
         
@@ -116,14 +108,29 @@ void SerialInterface::phrase_command(){
    
 }
 
-int SerialInterface::read_number(char input[], int start){
-  int index = 0;
-  int output = 0; 
-  while (isdigit(input[index+start])) {
-    output = output + int(input[index+start] - '0') * pow(10, index);
-    index++;
+void SerialInterface::read_int(char input[], int start, int min_val, int max_val, int* output){
+  double read_double = atof(input+start);
+  int read_int = (int) round(read_double);
+        
+  if (read_int >= min_val && read_int <= max_val){
+    *output = read_int;
+    this->serStreamRef->println("OK");
   }
-  return output;
+  else {      
+    this->serStreamRef->println("INPUT NOT VALID");        
+  } 
+}
+
+void SerialInterface::read_double(char input[], int start, double min_val, double max_val, double* output){
+  double read_double = atof(input+start);
+        
+  if (read_double >= min_val && read_double <= max_val){
+    *output = read_double;
+    this->serStreamRef->println("OK");
+  }
+  else {      
+    this->serStreamRef->println("INPUT NOT VALID");        
+  } 
 }
 
 bool SerialInterface::teststr(char input[], int start, char search[]){
