@@ -19,6 +19,9 @@ void SerialInterface::phrase_command(){
     char cmd_pid_p[] = "KP ";
     char cmd_pid_i[] = "KI ";
     char cmd_pid_d[] = "KD ";
+    char cmd_tc_a[] = "TC_A ";
+    char cmd_tc_b[] = "TC_B ";
+    char cmd_tc_c[] = "TC_C ";
     char cmd_s_time[] = "T_SLEEP ";
     char cmd_h_time[] = "T_HIBERNATE ";
     char cmd_s_tmp[] = "TMP_SLEEP ";
@@ -52,6 +55,18 @@ void SerialInterface::phrase_command(){
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_d)){
         int start_char = strlen(cmd_set)+strlen(cmd_pid_d);
         this->read_double(this->buffer, start_char, 0, 10, &(this->settings->KD));
+      }
+      else if (this->teststr(this->buffer, strlen(cmd_set), cmd_tc_a)){
+        int start_char = strlen(cmd_set)+strlen(cmd_tc_a);
+        this->read_double(this->buffer, start_char, -10, 10, &(this->settings->TC_A));
+      }
+      else if (this->teststr(this->buffer, strlen(cmd_set), cmd_tc_b)){
+        int start_char = strlen(cmd_set)+strlen(cmd_tc_b);
+        this->read_double(this->buffer, start_char, -10, 10, &(this->settings->TC_B));
+      }
+      else if (this->teststr(this->buffer, strlen(cmd_set), cmd_tc_c)){
+        int start_char = strlen(cmd_set)+strlen(cmd_tc_c);
+        this->read_double(this->buffer, start_char, -10, 10, &(this->settings->TC_C));
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_s_time)){
         int start_char = strlen(cmd_set)+strlen(cmd_s_time);
