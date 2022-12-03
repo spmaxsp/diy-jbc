@@ -8,7 +8,7 @@
 
 class SerialInterface { 
   private: 
-    char buffer[10];
+    char buffer[MAX_MESSAGE];
     int buf_cursor;
     Stream *serStreamRef;
     State *state;
