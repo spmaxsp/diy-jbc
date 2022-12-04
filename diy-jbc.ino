@@ -76,6 +76,7 @@ void isr(){
 void loop() {
   if(settings.new_pid_gains){
     myPID.setGains(settings.KP, settings.KI, settings.KD);
+    Serial.println("set gains");
     settings.gains_set();
   }
   

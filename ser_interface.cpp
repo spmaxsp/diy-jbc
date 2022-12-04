@@ -47,15 +47,18 @@ void SerialInterface::phrase_command(){
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_p)){
         int start_char = strlen(cmd_set)+strlen(cmd_pid_p);
-        this->read_double(this->buffer, start_char, 0, 10, &(this->settings->KP));
+        this->read_double(this->buffer, start_char, 0, 20, &(this->settings->KP));
+        this->settings->new_pid_gains = true;
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_i)){
         int start_char = strlen(cmd_set)+strlen(cmd_pid_i);
         this->read_double(this->buffer, start_char, 0, 10, &(this->settings->KI));
+        this->settings->new_pid_gains = true;
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_pid_d)){
         int start_char = strlen(cmd_set)+strlen(cmd_pid_d);
         this->read_double(this->buffer, start_char, 0, 10, &(this->settings->KD));
+        this->settings->new_pid_gains = true;
       }
       else if (this->teststr(this->buffer, strlen(cmd_set), cmd_tc_a)){
         int start_char = strlen(cmd_set)+strlen(cmd_tc_a);
