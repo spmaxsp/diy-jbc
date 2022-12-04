@@ -24,7 +24,7 @@
 
 //         ------Variables for Temperature Controll------
 #define MAX_CYCLES 30
-#define SLEEP_READ 250  //wait bevore reading tc
+#define SLEEP_READ 350  //wait bevore reading tc
 
 #define OUTPUT_MIN 0
 #define OUTPUT_MAX 100
