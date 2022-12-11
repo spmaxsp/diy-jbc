@@ -38,8 +38,12 @@ class MainPage{
 class Menue{
   private:
     menue menue_structure;
+    void display_menue();
+    void display_submenue();
+    void display_menueitem();
   public:
     Menue();
+    void display();
 };
 
 #endif

@@ -43,3 +43,70 @@ Menue::Menue(){
   };
 }
 
+void Menue::display_menue(){
+  u8g2.setFontMode(1);
+
+  u8g2.setDrawColor(1);
+  u8g2.drawBox(0, 0, u8g2.getDisplayWidth(), 13);
+
+  u8g2.setDrawColor(1);
+  u8g2.drawHLine(0, 15, u8g2.getDisplayWidth());
+
+  u8g2.setDrawColor(0);
+  u8g2.setFont(u8g2_font_ncenB08_tr);
+  u8g2.drawStr( 0, 12, "Main Menue");
+
+  u8g2.setDrawColor(1);
+  u8g2.drawBox(u8g2.getDisplayWidth()-15, 25, 6, 26);
+  u8g2.setFont(u8g2_font_unifont_t_symbols);
+  u8g2.drawGlyph(u8g2.getDisplayWidth()-16, 25, 9652);
+  u8g2.drawGlyph(u8g2.getDisplayWidth()-16, 60, 9662);
+  
+  u8g2.setDrawColor(1);
+  u8g2.setFont(u8g2_font_profont12_mr);
+  u8g2.drawStr( 10, 30, "Entry 1");
+  u8g2.drawStr( 10, 40, "Entry 2");
+  u8g2.drawStr( 10, 50, "Entry 3");
+  u8g2.drawStr( 10, 60, "Entry 4");
+  
+  u8g2.setDrawColor(1);
+  u8g2.setFont(u8g2_font_unifont_t_symbols);
+  u8g2.drawGlyph(0, 40+2, 9658);
+}
+
+void Menue::display_submenue(){
+  u8g2.setFontMode(1);
+
+  u8g2.setDrawColor(1);
+  u8g2.drawBox(0, 0, u8g2.getDisplayWidth(), 13);
+
+  u8g2.setDrawColor(1);
+  u8g2.drawHLine(0, 15, u8g2.getDisplayWidth());
+
+  u8g2.setDrawColor(0);
+  u8g2.setFont(u8g2_font_ncenB08_tr);
+  u8g2.drawStr( 0, 12, "Main Menue");
+
+  u8g2.setDrawColor(1);
+  u8g2.drawBox(u8g2.getDisplayWidth()-15, 25, 6, 26);
+  u8g2.setFont(u8g2_font_unifont_t_symbols);
+  u8g2.drawGlyph(u8g2.getDisplayWidth()-16, 25, 9652);
+  u8g2.drawGlyph(u8g2.getDisplayWidth()-16, 60, 9662);
+  
+  u8g2.setDrawColor(1);
+  u8g2.setFont(u8g2_font_profont12_mr);
+  u8g2.drawStr( 10, 30, "Entry 1");
+  u8g2.drawStr( 10, 40, "Entry 2");
+  u8g2.drawStr( 10, 50, "Entry 3");
+  u8g2.drawStr( 10, 60, "Entry 4");
+  
+  u8g2.setDrawColor(1);
+  u8g2.setFont(u8g2_font_unifont_t_symbols);
+  u8g2.drawGlyph(0, 40+2, 9658);
+}
+
+void Menue::display_menueitem(){
+
+}
+
+
