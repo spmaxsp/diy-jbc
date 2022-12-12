@@ -1,6 +1,18 @@
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 #include <Arduino.h>
+#include <U8g2lib.h>
+
+#include "graph.h"
+
+#ifdef U8X8_HAVE_HW_SPI
+#include <SPI.h>
+#endif
+#ifdef U8X8_HAVE_HW_I2C
+#include <Wire.h>
+#endif
+
+
 
 typedef struct {
   char title[20];
@@ -44,6 +56,28 @@ class Menue{
   public:
     Menue();
     void display();
+};
+
+class Graph{
+  private:
+    int buffer[GraphBufSize];
+    int start = 0;
+    int size = 0;
+
+    int xpos;
+    int ypos;
+    int xsize;
+    int ysize;
+
+    int minx;
+    int maxx;
+
+    void draw_cord();
+
+  public:
+    Graph(int, int, int, int, int, int);
+    void push(int n);
+    void draw_graph();
 };
 
 #endif

@@ -109,4 +109,53 @@ void Menue::display_menueitem(){
 
 }
 
+Graph::Graph(int x, int y, int xs, int ys, int min, int max){
+  xpos = x;
+  ypos = y;
+  xsize = xs;
+  ysize = ys;
+  minx = min;
+  maxx = max;
+}
+
+void Graph::push(int n){
+  if (size == GraphBufSize){
+    start = (start + 1)%GraphBufSize;
+  }
+  else {
+    size++;
+  }
+  buffer[(start+size)%GraphBufSize] = n;
+}
+
+void Graph::draw_cord(){
+  //u8g2.drawLine(xpos, ypos+ysize, xpos, ypos);
+  //u8g2.drawLine(xpos, ypos, xpos+3, ypos+4);
+  //u8g2.drawLine(xpos, ypos, xpos-3, ypos+4);
+
+  //u8g2.drawLine(xpos, ypos+ysize, xpos+xsize, ypos+ysize);
+  //u8g2.drawLine(xpos+xsize, ypos+ysize, xpos+xsize-4, ypos+ysize+3);
+  //u8g2.drawLine(xpos+xsize, ypos+ysize, xpos+xsize-4, ypos+ysize-3);
+  u8g2.drawXBMP(0, 0, 128, 64, graph_bits);
+}
+
+void Graph::draw_graph(){
+  draw_cord();
+  int xprev = 0;
+  int yprev = 0;
+
+  for(int i = 0; i < size; i++){
+
+    int y = map(buffer[(start+i+1)%GraphBufSize], minx, maxx, ypos+ysize, ypos);
+    int x = map(i, 0, GraphBufSize, xpos, xpos+xsize);
+
+    if (i >= 1){
+      u8g2.drawLine(xprev, yprev, x, y);
+    }
+
+    xprev = x;
+    yprev = y;
+  } 
+}
+
 
