@@ -12,7 +12,7 @@
 #include <Wire.h>
 #endif
 
-
+#define GraphBufSize 50
 
 typedef struct {
   char title[20];
@@ -36,30 +36,31 @@ typedef struct {
   submenue menue_items[];
 } menue;
 
-class Display{ 
-  private: 
-
-  public:  
-    
-};
-
-class MainPage{
-
-};
-
-class Menue{
+class MainPage {
   private:
+    U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref;
+  public:
+    MainPage();
+    void init(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref);
+};
+
+class Menue {
+  private:
+    U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref;
     menue menue_structure;
     void display_menue();
     void display_submenue();
     void display_menueitem();
   public:
     Menue();
+    void init(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref);
     void display();
 };
 
-class Graph{
+class Graph {
   private:
+    U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref;
+    
     int buffer[GraphBufSize];
     int start = 0;
     int size = 0;
@@ -75,9 +76,29 @@ class Graph{
     void draw_cord();
 
   public:
-    Graph(int, int, int, int, int, int);
+    Graph(int x, int y, int xs, int ys, int min, int max);
+    void init(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref);
     void push(int n);
     void draw_graph();
+};
+
+class Display{ 
+  private: 
+    U8G2_SH1106_128X64_NONAME_1_HW_I2C u8g2;
+
+    bool display_menue;
+    bool display_main;
+    bool display_graph;
+
+    MainPage mainpage_obj;
+    Graph graph_obj;
+    Menue menue_obj;
+    
+    
+  public:
+    Display();
+    void begin();  
+    
 };
 
 #endif
