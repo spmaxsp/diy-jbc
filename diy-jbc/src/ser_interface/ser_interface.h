@@ -1,8 +1,8 @@
 #ifndef SER_INTERFACE_H_
 #define SER_INTERFACE_H_
 #include <Arduino.h>
-#include "state.h"
-#include "settings.h"
+#include "../../state.h"
+#include "../../settings.h"
 
 #define MAX_MESSAGE 30
 

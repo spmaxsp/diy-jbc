@@ -3,10 +3,9 @@
 
 #include "jbc.h"
 #include "temperature.h"
-#include "display.h"
-#include "ser_interface.h"
-#include "input.h"
-#include "led.h"
+#include "src/display/display.h"
+#include "src/ser_interface/ser_interface.h"
+#include "src/led/led.h"
 #include "settings.h"
 
 #include "state.h"

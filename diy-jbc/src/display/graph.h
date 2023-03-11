@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
 
-#include "graph_graphics.h"
+#include "graphics/graph_graphics.h"
 
 #define GraphBufSize 50
 
