@@ -1,4 +1,4 @@
-#include <AutoPID.h>
+#include <PID_v1.h>
 #include <max6675.h>
 
 #include "jbc.h"
@@ -37,7 +37,7 @@ double is_temperature, set_temperature, pid_output;
 SettingsEEPROM settings;
 
 MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
-AutoPID myPID(&is_temperature, &set_temperature, &pid_output, OUTPUT_MIN, OUTPUT_MAX, settings.KP, settings.KI, settings.KD);
+PID myPID(&is_temperature, &set_temperature, &pid_output, settings.KP, settings.KI, settings.KD, DIRECT);
 
 State state;
 
@@ -55,6 +55,9 @@ void setup() {
     
   Serial.begin(9600);
   delay(500);
+
+  myPID.SetOutputLimits(OUTPUT_MIN, OUTPUT_MAX);
+  myPID.SetMode(AUTOMATIC);
 
   if (temperature.testTemp()){
     Serial.println("Error reading TC");
@@ -74,7 +77,7 @@ void isr(){
 
 void loop() {
   if(settings.new_pid_gains){
-    myPID.setGains(settings.KP, settings.KI, settings.KD);
+    myPID.SetTunings(settings.KP, settings.KI, settings.KD);
     Serial.println("set gains");
     settings.gains_set();
   }
@@ -101,7 +104,7 @@ void loop() {
         Serial.println("READING_ERROR");
       }
       else{
-        myPID.run();
+        myPID.Compute();
         ser_interface.print_graph(is_temperature, set_temperature, pid_output);
         status_led.update(is_temperature);
         jbc.set_power_target(pid_output);
