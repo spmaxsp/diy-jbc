@@ -3,11 +3,13 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
 
-#include "graphics/graph_graphics.h"
+#include "../../screenmanager.h"
+
+#include "./graphics/graph_graphics.h"
 
 #define GraphBufSize 50
 
-class Graph {
+class Graph: public Screen {
   private:
     U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref;
     
@@ -24,12 +26,13 @@ class Graph {
     int maxx;
 
     void draw_cord();
+    void draw_graph();
+    void push(int n);
 
   public:
     Graph(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref, int x, int y, int xs, int ys, int min, int max);
-    //void init(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref);
-    void push(int n);
-    void draw_graph();
+    void display();
+    bool handle_input(Input input);
 };
 
 #endif

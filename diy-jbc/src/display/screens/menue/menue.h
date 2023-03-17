@@ -3,6 +3,8 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
 
+#include "../../screenmanager.h"
+
 typedef struct {
   char title[20];
   double value;
@@ -25,7 +27,7 @@ typedef struct {
   submenue menue_items[];
 } mainmenue;
 
-class MenueScreen {
+class MenueScreen: public Screen {
   private:
     U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref;
     mainmenue menue_structure;
@@ -35,6 +37,7 @@ class MenueScreen {
   public:
     MenueScreen(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref);
     void display();
+    bool handle_input(Input input):
 };
 
 #endif
