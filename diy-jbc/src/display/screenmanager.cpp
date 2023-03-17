@@ -1,17 +1,17 @@
 #include "screenmanager.h"
 
 ScreenManager::ScreenManager(){
-    this->active_screen = NULL;
+    this->active_screen = nullptr;
 }
 
 void ScreenManager::display(){
-    if (this->active_screen != NULL){
+    if (this->active_screen != nullptr){
         this->active_screen->display();
     }
 }
 
 void ScreenManager::handle_input(Input input){
-    if (this->active_screen != NULL){
+    if (this->active_screen != nullptr){
         this->active_screen->handle_input(input);
     }
 }
