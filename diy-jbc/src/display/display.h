@@ -3,9 +3,14 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
 
-#include "graph.h"
-#include "mainscreen.h"
-#include "menue.h"
+
+#include "./screens/graph/graph.h"
+#include "./screens/mainscreen/mainscreen.h"
+#include "./screens/menue/menue.h"
+
+#include "screenmanager.h"
+
+#include "input.h"
 
 #ifdef U8X8_HAVE_HW_SPI
 #include <SPI.h>
@@ -18,18 +23,18 @@ class Display{
   private: 
     U8G2_SH1106_128X64_NONAME_1_HW_I2C u8g2;
 
-    bool display_menue;
-    bool display_main;
-    bool display_graph;
-
     Graph graph_obj;
     MainScreen mainscreen_obj;
-    MenueScreen menuescreen_obj;    
+    MenueScreen menuescreen_obj;  
+
+    ScreenManager screenmanager;
+
+    Input input;  
     
   public:
-    Display();
+    Display(int button_red, int button_blue, int rotary_sw, int rotary_clk, int rotary_dt);
     void begin();  
-    
+    void update();
 };
 
 #endif
