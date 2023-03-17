@@ -21,10 +21,10 @@ private:
     const int ROT_DEBOUNCE = 50;
     const int BUTTON_DEBOUNCE = 500;
 
-    static Input* this_instance;
+    static Input* this_instance;  // stores a reference to the instance the interrupt is bound to
 
-    static void Interrupt();
-    void rotaryInterrupt();
+    static void Interrupt();      // a static function which can be called by attachInterrupt, which then calls rotaryInterrupt
+    void rotaryInterrupt(); 
 
 public:
     bool button_red_pressed;
