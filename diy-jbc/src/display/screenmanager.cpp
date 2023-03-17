@@ -10,7 +10,7 @@ void ScreenManager::display(){
     }
 }
 
-void ScreenManager::handle_input(Input input){
+void ScreenManager::handle_input(Input* input){
     if (this->active_screen != nullptr){
         this->active_screen->handle_input(input);
     }

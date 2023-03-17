@@ -12,13 +12,13 @@ class ScreenManager {
     public:
         ScreenManager();
         void display();
-        void handle_input(Input input);
+        void handle_input(Input* input);
         void add_screen(Screen* screen);
 };
 
 class Screen {
     public:
-        virtual bool handle_input(Input input)=0;
+        virtual bool handle_input(Input* input)=0;
         virtual void display()=0;
 };
 
