@@ -42,7 +42,75 @@ MenueScreen::MenueScreen(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
   };
 }
 
-void MenueScreen::display_menue(){
+void MenueScreen::display(){
+  if (menue_structure.active){
+    display_menue(&menue_structure);
+  }
+  else{
+    submenue* submenue = &menue_structure.menue_items[menue_structure.selected];
+    if (submenue->active){
+      display_submenue(submenue);
+    }
+    else{
+      menueitem* menueitem = &submenue->menue_items[submenue->selected];
+      display_menueitem(menueitem);
+    }
+  }
+}
+
+void MenueScreen::setup_encoder(Input* input){
+  if (menue_structure.active){
+    input->change_rotary_value(menue_structure.selected);
+    input->change_rotary_min_max(0,len(menue_structure.menue_items)-1);
+  }
+  else{
+    submenue* submenue = &menue_structure.menue_items[menue_structure.selected];
+    if (submenue->active){
+      input->change_rotary_value(submenue->selected);
+      input->change_rotary_min_max(0,len(submenue->menue_items)-1);
+    }
+    else{
+      menueitem* menueitem = &submenue->menue_items[submenue->selected];
+      input->change_rotary_value(menueitem->value);
+      input->change_rotary_min_max(menueitem->min_value,menueitem->max_value);
+    }
+  }
+}
+
+void MenueScreen::handle_input(Input* input){
+  if (menue_structure.active){
+    if(input->button_red_pressed){
+      return false;
+    }
+    else if (input->button_blue_pressed or input->button_rotary_pressed){
+      menue_structure.active = false;
+      menue_structure.menue_items[menue_structure.selected].active = true;
+      this->setup_encoder(input);
+    } 
+    menue_structure.selected = input->rotary_value;
+  }
+  else{
+    submenue* submenue = &menue_structure.menue_items[menue_structure.selected];
+    if (submenue->active){
+      if(input->button_red_pressed){
+        submenue->active = false;
+        menue_structure.active = true;
+        this->setup_encoder(input);
+      }
+      else if (input->button_blue_pressed or input->button_rotary_pressed){
+        submenue->active = false;
+        this->setup_encoder(input);
+      } 
+      submenue->selected = input->rotary_value;
+    }
+    else{
+    
+    }
+  }
+  return true;
+}
+
+void MenueScreen::display_menue(mainmenue* menue){
   u8g2ref->setFontMode(1);
 
   u8g2ref->setDrawColor(1);
@@ -73,7 +141,7 @@ void MenueScreen::display_menue(){
   u8g2ref->drawGlyph(0, 40+2, 9658);
 }
 
-void MenueScreen::display_submenue(){
+void MenueScreen::display_submenue(submenue* menue){
   u8g2ref->setFontMode(1);
 
   u8g2ref->setDrawColor(1);
@@ -102,4 +170,8 @@ void MenueScreen::display_submenue(){
   u8g2ref->setDrawColor(1);
   u8g2ref->setFont(u8g2_font_unifont_t_symbols);
   u8g2ref->drawGlyph(0, 40+2, 9658);
+}
+
+void MenueScreen::display_menueitem(menueitem* item){
+
 }
