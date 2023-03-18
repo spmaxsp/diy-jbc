@@ -61,13 +61,13 @@ void MenueScreen::display(){
 void MenueScreen::setup_encoder(Input* input){
   if (menue_structure.active){
     input->change_rotary_value(menue_structure.selected);
-    input->change_rotary_min_max(0,len(menue_structure.menue_items)-1);
+    input->change_rotary_min_max(0,sizeof(menue_structure.menue_items)-1);
   }
   else{
     submenue* submenue = &menue_structure.menue_items[menue_structure.selected];
     if (submenue->active){
       input->change_rotary_value(submenue->selected);
-      input->change_rotary_min_max(0,len(submenue->menue_items)-1);
+      input->change_rotary_min_max(0,sizeof(submenue->menue_items)-1);
     }
     else{
       menueitem* menueitem = &submenue->menue_items[submenue->selected];
@@ -77,7 +77,7 @@ void MenueScreen::setup_encoder(Input* input){
   }
 }
 
-void MenueScreen::handle_input(Input* input){
+bool MenueScreen::handle_input(Input* input){
   if (menue_structure.active){
     if(input->button_red_pressed){
       return false;
@@ -87,7 +87,7 @@ void MenueScreen::handle_input(Input* input){
       menue_structure.menue_items[menue_structure.selected].active = true;
       this->setup_encoder(input);
     } 
-    menue_structure.selected = input->rotary_value;
+    menue_structure.selected = input->encoder_pos;
   }
   else{
     submenue* submenue = &menue_structure.menue_items[menue_structure.selected];
@@ -101,7 +101,7 @@ void MenueScreen::handle_input(Input* input){
         submenue->active = false;
         this->setup_encoder(input);
       } 
-      submenue->selected = input->rotary_value;
+      submenue->selected = input->encoder_pos;
     }
     else{
     

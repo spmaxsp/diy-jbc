@@ -1,5 +1,6 @@
 #ifndef INPUT_H_
 #define INPUT_H_
+#include <Arduino.h>
 
 class Input {
 private:
@@ -18,8 +19,8 @@ private:
     unsigned long last_button_red = 0;
     unsigned long last_button_blue = 0;
 
-    const int ROT_DEBOUNCE = 50;
-    const int BUTTON_DEBOUNCE = 500;
+    const unsigned int ROT_DEBOUNCE = 50;
+    const unsigned int BUTTON_DEBOUNCE = 500;
 
     static Input* this_instance;  // stores a reference to the instance the interrupt is bound to
 
@@ -35,7 +36,7 @@ public:
 
     Input(int button_red, int button_blue, int rotary_sw, int rotary_clk, int rotary_dt);
     void update();
-    void cahnge_rotary_value(int value);
+    void change_rotary_value(int value);
     void change_rotary_min_max(int min, int max);
 };
 
@@ -103,7 +104,7 @@ void Input::rotaryInterrupt(){
   }
 }
 
-void Input::cahnge_rotary_value(int value) {
+void Input::change_rotary_value(int value) {
     this->encoder_pos = value;
 }
 

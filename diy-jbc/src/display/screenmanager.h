@@ -3,6 +3,12 @@
 
 #include "input.h"
 
+class Screen {
+    public:
+        virtual bool handle_input(Input* input)=0;
+        virtual void display()=0;
+};
+
 class ScreenManager {
     private:
         Screen* active_screen;
@@ -14,12 +20,6 @@ class ScreenManager {
         void handle_input(Input* input);
         void add_screen(Screen* screen);
         void set_active_screen(int screen_id);
-};
-
-class Screen {
-    public:
-        virtual bool handle_input(Input* input)=0;
-        virtual void display()=0;
 };
 
 #endif /* SCREENMANAGER_H_ */

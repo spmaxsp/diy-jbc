@@ -30,10 +30,11 @@ typedef struct {
 class MenueScreen: public Screen {
   private:
     U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref;
+    void display_menue(mainmenue* menue);
+    void display_submenue(submenue* menue);
+    void display_menueitem(menueitem* item);
+    void setup_encoder(Input* input);
     mainmenue menue_structure;
-    void display_menue();
-    void display_submenue();
-    void display_menueitem();
   public:
     MenueScreen(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref);
     void display();
