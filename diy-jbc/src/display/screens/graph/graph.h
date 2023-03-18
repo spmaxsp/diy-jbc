@@ -32,7 +32,7 @@ class Graph: public Screen {
   public:
     Graph(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref, int x, int y, int xs, int ys, int min, int max);
     void display();
-    bool handle_input(Input input);
+    bool handle_input(Input* input);
 };
 
 #endif

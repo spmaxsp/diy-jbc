@@ -37,7 +37,7 @@ class MenueScreen: public Screen {
   public:
     MenueScreen(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref);
     void display();
-    bool handle_input(Input input):
+    bool handle_input(Input* input);
 };
 
 #endif

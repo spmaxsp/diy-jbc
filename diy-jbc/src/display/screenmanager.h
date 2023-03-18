@@ -8,12 +8,12 @@ class ScreenManager {
         Screen* active_screen;
         Screen* screens[3];
         int screen_count = 0;
-        void set_active_screen(int screen_id);
     public:
         ScreenManager();
         void display();
         void handle_input(Input* input);
         void add_screen(Screen* screen);
+        void set_active_screen(int screen_id);
 };
 
 class Screen {

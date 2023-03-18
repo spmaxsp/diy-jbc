@@ -12,15 +12,17 @@ Display::Display(int button_red, int button_blue, int rotary_sw, int rotary_clk,
 void Display::begin(){
     u8g2.begin();
 
-    screenmanager.add_screen(&mainscreen_obj);
-    screenmanager.add_screen(&menuescreen_obj);
-    screenmanager.add_screen(&graph_obj);
+    screenmanager.add_screen(&mainscreen_obj);  // 0
+    screenmanager.add_screen(&menuescreen_obj); // 1
+    screenmanager.add_screen(&graph_obj);       // 2
+
+    screenmanager.set_active_screen(0);
 }
 
 void Display::update(){
     input.update();
     u8g2.clearBuffer();	
-    screenmanager.handle_input(input);
+    screenmanager.handle_input(&input);
     screenmanager.display();
     u8g2.sendBuffer();
 }
