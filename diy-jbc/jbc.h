@@ -2,10 +2,12 @@
 #define JBC_H_
 #include <Arduino.h>
 
-#define ZERO_CROSSING_PIN  2 //INT0 (pullup)
-#define GATE_PIN    4
-
 class Jbc {  
+  private:
+      //pins
+      int zerro_crossing_pin;
+      int gate_pin;
+
       //power
       int main_cycle;
       int active_cycles;
@@ -15,7 +17,7 @@ class Jbc {
       unsigned long int last_heat;
 
   public:  
-      Jbc(int max_cycles);
+      Jbc(int max_cycles, int zerro_crossing_pin, int gate_pin);
       void begin();
 
       void set_power_target(int target);

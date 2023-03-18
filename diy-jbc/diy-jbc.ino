@@ -17,9 +17,15 @@
 
 #define stationIN A5 //(pullup)
 
-#define ROT_BUTTON 9
-#define ROT_A      10
-#define ROT_B      2 //INT1
+#define ZERO_CROSSING_PIN  2 //INT0 (pullup)
+#define GATE_PIN    4
+
+#define ENCODER_CLK 2 // INT0
+#define ENCODER_DT  10
+#define ENCODER_BUTTON 9
+
+#define BUTTON_RED A1
+#define BUTTON_BLUE A2
 
 //         ------Variables for Temperature Controll------
 #define MAX_CYCLES 30
@@ -41,7 +47,7 @@ PID myPID(&is_temperature, &set_temperature, &pid_output, settings.KP, settings.
 
 State state;
 
-Jbc jbc(MAX_CYCLES);
+Jbc jbc(MAX_CYCLES, ZERO_CROSSING_PIN, GATE_PIN);
 Temperature temperature(&thermocouple, &state, &settings);
 SerialInterface ser_interface(&Serial , &state, &settings);
 StatusLed status_led;

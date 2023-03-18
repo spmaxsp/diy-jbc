@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include "jbc.h"
 
-Jbc::Jbc(int max_cycles){
+Jbc::Jbc(int max_cycles, int zerro_crossing_pin, int gate_pin){
+  this->zerro_crossing_pin = zerro_crossing_pin;
+  this->gate_pin = gate_pin;
   this->max_cycles = max_cycles;
   this->main_cycle = 0;
   this->active_cycles = 0;
@@ -9,9 +11,9 @@ Jbc::Jbc(int max_cycles){
 }
 
 void Jbc::begin() {
-  pinMode(GATE_PIN, OUTPUT);
-  digitalWrite(GATE_PIN, LOW);
-  pinMode(ZERO_CROSSING_PIN, INPUT_PULLUP);
+  pinMode(gate_pin, OUTPUT);
+  digitalWrite(gate_pin, LOW);
+  pinMode(zerro_crossing_pin, INPUT_PULLUP);
 }
 
 void Jbc::run_heating_phase() {
@@ -21,7 +23,7 @@ void Jbc::run_heating_phase() {
 
 void Jbc::end_heaing_phase() {
   this->heating_phase = false;
-  digitalWrite(GATE_PIN, LOW);
+  digitalWrite(gate_pin, LOW);
   this->last_heat = millis();
 }
 
@@ -40,15 +42,15 @@ void Jbc::set_power_target(int target){
 void Jbc::zeroCrossingInterrupt(){
   if (this->heating_phase){  
      if(this->main_cycle < this->active_cycles){
-      digitalWrite(GATE_PIN,HIGH);
+      digitalWrite(gate_pin,HIGH);
      }
      else{
-      digitalWrite(GATE_PIN,LOW);
+      digitalWrite(gate_pin,LOW);
       this->end_heaing_phase();
      }
      main_cycle++;
   }
   else {
-    digitalWrite(GATE_PIN,LOW);
+    digitalWrite(gate_pin,LOW);
   }
 }
