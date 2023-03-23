@@ -149,6 +149,10 @@ bool MenueItem::handle_input(Input* input){
   return true;
 }
 
+void MenueElement::add_menueelement(MenueElement* menueelement){
+  return;
+}
+
 
 
 

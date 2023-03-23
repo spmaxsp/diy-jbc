@@ -4,6 +4,8 @@
 #include <U8g2lib.h>
 
 #include "../../screenmanager.h"
+#include "../../input.h"
+#include "../../screen.h"
 
 class MainScreen: public Screen {
   private:

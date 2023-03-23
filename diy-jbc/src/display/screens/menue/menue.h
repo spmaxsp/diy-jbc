@@ -4,6 +4,8 @@
 #include <U8g2lib.h>
 
 #include "../../screenmanager.h"
+#include "../../input.h"
+#include "../../screen.h"
 
 class MenueElement {
   public:
@@ -13,10 +15,6 @@ class MenueElement {
     void virtual add_menueelement(MenueElement* menueelement);
     void virtual setup_encoder(Input* input)=0;
 };
-
-void MenueElement::add_menueelement(MenueElement* menueelement){
-  return;
-}
 
 class MenueItem: public MenueElement {
   private:
