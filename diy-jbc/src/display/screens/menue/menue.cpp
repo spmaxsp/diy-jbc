@@ -6,7 +6,7 @@ MenueScreen::MenueScreen(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
   this->menue_structure = new SubMenue("Main Menue", 3);
 
   SubMenue* functions_menue = new SubMenue("Functions", 4);
-  functions_menue->add_menueelement(new MenueItem("Sleep D. (s)", 0, 'i', 3600.0, 1));
+  functions_menue->add_menueelement(new MenueItem("Sleep D. (s)", 0, 'i', 3600, 1));
   functions_menue->add_menueelement(new MenueItem("Sleep T. (C)", 0, 'f', 500, 0));
   functions_menue->add_menueelement(new MenueItem("Hib. D. (s)", 0, 'i', 3600, 1));
   functions_menue->add_menueelement(new MenueItem("Hib T. (C)", 0, 'f', 500, 0));
@@ -30,7 +30,7 @@ void MenueScreen::display(){
 
 }
 
-SubMenue::SubMenue(char* title, int size){
+SubMenue::SubMenue(const char title[], int size){
   strcpy(this->title, title);
   this->enty_selected = 0;
   this->selected_entry_active = false;
@@ -85,12 +85,33 @@ void SubMenue::display(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
 
 }
 
+void SubMenue::setup_encoder(Input* input){
+  input->change_rotary_min_max(0, this->menueelement_count-1);
+  input->change_rotary_value(this->enty_selected);
+}
+
 bool SubMenue::handle_input(Input* input){
-  
+  if (this->selected_entry_active){
+    if (this->menueelements[this->enty_selected]->handle_input(input)){
+      this->selected_entry_active = false;
+      this->setup_encoder(input);
+    }
+  }
+  else{
+    this->enty_selected = input->encoder_pos;
+    if (input->button_blue_pressed or input->button_rotary_pressed){
+      this->selected_entry_active = true;
+      this->menueelements[this->enty_selected]->setup_encoder(input);
+    }
+    else if (input->button_red_pressed){
+      return false;
+    }
+  }
+  return true;
 }
 
 
-MenueItem::MenueItem(char* title, double value, char type, double max_value, double min_value){
+MenueItem::MenueItem(const char title[], double value, char type, double max_value, double min_value){
   strcpy(this->title, title);
   this->value = value;
   this->type = type;
@@ -106,15 +127,26 @@ void MenueItem::display_as_entry(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref, in
 
 void MenueItem::display(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
   char buf[5];
-  snprintf (buf, 5, "%d", this->value);
+  snprintf (buf, 5, "%f", this->value);
   u8g2ref->setDrawColor(1);
   u8g2ref->setFont(u8g2_font_profont12_mr);
   u8g2ref->drawStr( 10, 25, this->title);
   u8g2ref->drawStr( 10, 40, buf);
 }
 
-bool MenueItem::handle_input(Input* input){
+void MenueItem::setup_encoder(Input* input){
+  input->change_rotary_min_max(this->min_value, this->max_value);
+  input->change_rotary_value(this->value);
+}
 
+bool MenueItem::handle_input(Input* input){
+  if (input->button_blue_pressed or input->button_red_pressed or input->button_rotary_pressed){
+    return false;
+  }
+  else{
+    this->value = input->encoder_pos;
+  }
+  return true;
 }
 
 
