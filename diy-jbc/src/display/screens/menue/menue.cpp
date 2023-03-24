@@ -27,7 +27,11 @@ MenueScreen::MenueScreen(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
 }
 
 void MenueScreen::display(){
+  this->menue_structure->display(this->u8g2ref);
+}
 
+bool MenueScreen::handle_input(Input* input){
+  return this->menue_structure->handle_input(input);
 }
 
 SubMenue::SubMenue(const char title[], int size){
@@ -73,6 +77,15 @@ void SubMenue::display_scrollbar(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
 }
 
 void SubMenue::display_entries(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
+  if (this->enty_selected > 3){
+    this->scroll_offset = this->enty_selected - 3;
+  }
+  else{
+    this->scroll_offset = 0;
+  }
+  for (int i = this->scroll_offset; i < this->scroll_offset + 4 && i < this->menueelement_count; i++){
+    this->menueelements[i]->display_as_entry(u8g2ref, 25 + (i-this->scroll_offset)*15);
+  }
 }
 
 void SubMenue::display_as_entry(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref, int y){
@@ -82,7 +95,14 @@ void SubMenue::display_as_entry(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref, int
 }
 
 void SubMenue::display(U8G2_SH1106_128X64_NONAME_1_HW_I2C* u8g2ref){
-
+  if (this->selected_entry_active){
+    this->menueelements[this->enty_selected]->display(u8g2ref);
+  }
+  else{
+    this->diplay_title(u8g2ref);
+    this->display_scrollbar(u8g2ref);
+    this->display_entries(u8g2ref);
+  }
 }
 
 void SubMenue::setup_encoder(Input* input){
