@@ -12,7 +12,21 @@ void ScreenManager::display(){
 
 void ScreenManager::handle_input(Input* input){
     if (this->active_screen != nullptr){
-        this->active_screen->handle_input(input);
+        if (this-> active_screen != this->screens[0]){
+            if (this->active_screen->handle_input(input) == false){
+                set_active_screen(0);
+            }
+        } 
+        else {
+            if (this->active_screen->handle_input(input) == false){
+                if (input->button_blue_pressed){
+                    set_active_screen(1);
+                }
+                if (input->button_rotary_pressed){
+                    set_active_screen(2);
+                }
+            }
+        }
     }
 }
 
