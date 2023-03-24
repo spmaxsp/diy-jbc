@@ -92,19 +92,21 @@ void SubMenue::setup_encoder(Input* input){
 
 bool SubMenue::handle_input(Input* input){
   if (this->selected_entry_active){
-    if (this->menueelements[this->enty_selected]->handle_input(input)){
+    if (this->menueelements[this->enty_selected]->handle_input(input) == false){
       this->selected_entry_active = false;
       this->setup_encoder(input);
     }
   }
   else{
-    this->enty_selected = input->encoder_pos;
     if (input->button_blue_pressed or input->button_rotary_pressed){
       this->selected_entry_active = true;
       this->menueelements[this->enty_selected]->setup_encoder(input);
     }
     else if (input->button_red_pressed){
       return false;
+    }
+    else {
+      this->enty_selected = input->encoder_pos;
     }
   }
   return true;
@@ -150,7 +152,7 @@ bool MenueItem::handle_input(Input* input){
 }
 
 void MenueElement::add_menueelement(MenueElement* menueelement){
-  return;
+  return;  // empty function so add menueelement can be called on menueitem and wont give an error
 }
 
 
