@@ -3,7 +3,6 @@
 
 #include "jbc.h"
 #include "temperature.h"
-#include "src/display/display.h"
 #include "src/ser_interface/ser_interface.h"
 #include "src/led/led.h"
 #include "settings.h"
@@ -19,13 +18,6 @@
 
 #define ZERO_CROSSING_PIN  2 //INT0 (pullup)
 #define GATE_PIN    4
-
-#define ENCODER_CLK 2 // INT0
-#define ENCODER_DT  10
-#define ENCODER_BUTTON 9
-
-#define BUTTON_RED A1
-#define BUTTON_BLUE A2
 
 //         ------Variables for Temperature Controll------
 #define MAX_CYCLES 30
