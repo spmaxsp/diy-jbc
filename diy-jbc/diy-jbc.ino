@@ -44,12 +44,13 @@ Temperature temperature(&thermocouple, &state, &settings);
 SerialInterface ser_interface(&Serial , &state, &settings);
 StatusLed status_led;
 
+
 void setup() {
 
   settings.read_settings();  
 
   jbc.begin();
-  status_led.begin();
+  //status_led.begin();
     
   Serial.begin(9600);
   delay(500);
@@ -104,7 +105,7 @@ void loop() {
       else{
         myPID.Compute();
         ser_interface.print_graph(is_temperature, set_temperature, pid_output);
-        status_led.update(is_temperature);
+        //status_led.update(is_temperature);
         jbc.set_power_target(pid_output);
         jbc.run_heating_phase();
       }
