@@ -6,11 +6,13 @@ My Interpretation of a Soldering Station for the T245 Handle and C245 Cartridge.
 ---
 **!Project is still in development!(some things may not be implemented yet)**
 
+**Currently reworking the project to STM32 platform.**
+
 ---
 ## Project Structure
-Because I have not been able to fit my complete code on one Atmega328P I decided to split the project into two parts. The first part is the main controller for the station itself. The second part is the userinterface. The userinterface is a separate PCB with a Atmega328P and a 128x64 OLED Display. The two parts communicate via I2C.
+~~Because I have not been able to fit my complete code on one Atmega328P I decided to split the project into two parts. The first part is the main controller for the station itself. The second part is the userinterface. The userinterface is a separate PCB with a Atmega328P and a 128x64 OLED Display. The two parts communicate via I2C.~~
 
-The Project is compiled with the [PlatformIO](https://platformio.org/) IDE,  but it should also be possible to compile it with the Arduino IDE. (I try to keep the code as compatible as possible)
+~~The Project is compiled with the [PlatformIO](https://platformio.org/) IDE,  but it should also be possible to compile it with the Arduino IDE. (I try to keep the code as compatible as possible)~~
 
 ## Features
 - PID Control
@@ -67,7 +69,8 @@ Stops outputting the current temperature to the serial interface
 - Standby Time
 
 ## Hardware
-- Atmega328P
+- ~~Atmega328P~~
+- STM32G071
 - 128x64 OLED Display
 - WS2812B RGB LED
 - Encoder with Pushbutton
