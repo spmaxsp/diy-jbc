@@ -27,8 +27,8 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32g0xx_hal.h"
 
+#include "stm32g0xx_ll_dma.h"
 #include "stm32g0xx_ll_i2c.h"
 #include "stm32g0xx_ll_rcc.h"
 #include "stm32g0xx_ll_bus.h"
@@ -37,11 +37,14 @@ extern "C" {
 #include "stm32g0xx_ll_cortex.h"
 #include "stm32g0xx_ll_utils.h"
 #include "stm32g0xx_ll_pwr.h"
-#include "stm32g0xx_ll_dma.h"
 #include "stm32g0xx_ll_spi.h"
 #include "stm32g0xx_ll_tim.h"
 #include "stm32g0xx_ll_usart.h"
 #include "stm32g0xx_ll_gpio.h"
+
+#if defined(USE_FULL_ASSERT)
+#include "stm32_assert.h"
+#endif /* USE_FULL_ASSERT */
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -87,8 +90,6 @@ void Error_Handler(void);
 #define STATION_SENS_GPIO_Port GPIOB
 #define PWR_TRIAC_EN_Pin LL_GPIO_PIN_8
 #define PWR_TRIAC_EN_GPIO_Port GPIOA
-#define PWR_ZERO_IN_Pin LL_GPIO_PIN_12
-#define PWR_ZERO_IN_GPIO_Port GPIOA
 #define BUTTON_ENCODER_Pin LL_GPIO_PIN_0
 #define BUTTON_ENCODER_GPIO_Port GPIOD
 #define BUTTON_BLUE_Pin LL_GPIO_PIN_1
