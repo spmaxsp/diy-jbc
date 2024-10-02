@@ -1,0 +1,96 @@
+
+#include "display.h"
+
+extern u8g2_t u8g2;
+
+#define DISPLAY_FORMAT_GRAPH_PX_X_SIZE  80
+#define DISPLAY_FORMAT_GRAPH_PX_Y_SIZE  40
+
+#define DISPLAY_FORMAT_GRAPH_PX_X_0  20
+#define DISPLAY_FORMAT_GRAPH_PX_Y_0  55
+
+#define DISPLAY_FORMAT_GRAPH_PX_X_1  DISPLAY_FORMAT_GRAPH_PX_X_0 + DISPLAY_FORMAT_GRAPH_PX_X_SIZE + 10
+#define DISPLAY_FORMAT_GRAPH_PX_Y_1  DISPLAY_FORMAT_GRAPH_PX_Y_0 - DISPLAY_FORMAT_GRAPH_PX_Y_SIZE - 10
+
+#define DISPLAY_FORMAT_GRAPH_PX_X_MARKER_0  DISPLAY_FORMAT_GRAPH_PX_X_0
+#define DISPLAY_FORMAT_GRAPH_PX_X_MARKER_1  DISPLAY_FORMAT_GRAPH_PX_X_0 + (DISPLAY_FORMAT_GRAPH_PX_X_SIZE * 0.5)
+#define DISPLAY_FORMAT_GRAPH_PX_X_MARKER_2  DISPLAY_FORMAT_GRAPH_PX_X_0 + DISPLAY_FORMAT_GRAPH_PX_X_SIZE
+
+#define DISPLAY_FORMAT_GRAPH_PX_Y_MARKER_0  DISPLAY_FORMAT_GRAPH_PX_Y_0
+#define DISPLAY_FORMAT_GRAPH_PX_Y_MARKER_1  DISPLAY_FORMAT_GRAPH_PX_Y_0 - (DISPLAY_FORMAT_GRAPH_PX_Y_SIZE * 0.5)
+#define DISPLAY_FORMAT_GRAPH_PX_Y_MARKER_2  DISPLAY_FORMAT_GRAPH_PX_Y_0 - DISPLAY_FORMAT_GRAPH_PX_Y_SIZE
+
+#define DISPLAY_FORMAT_GRAPH_MAX_VALUE  400
+#define DISPLAY_FORMAT_GRAPH_MIN_VALUE  0
+
+#define DISPLAY_FORMAT_GRAPH_DATA_SIZE  20 // 20 Data Points (20s)
+
+void Display_Render_Screen_Plot(void){
+
+    static float tmp_counter = 1.0;
+
+    static int buffer[DISPLAY_FORMAT_GRAPH_DATA_SIZE] = {0};
+    static int buffer_index = 0;
+
+    // Get Temperature
+    int temperature = tmp_counter;
+
+    // Save Temperature
+    buffer[buffer_index] = temperature;
+    buffer_index++;
+    if(buffer_index >= DISPLAY_FORMAT_GRAPH_DATA_SIZE){
+        buffer_index = 0;
+    }
+
+    // Increment Counter
+    tmp_counter*=1.1;
+    if(tmp_counter > 400){
+        tmp_counter = 1.0;
+    }
+
+
+    u8g2_FirstPage(&u8g2);
+    do
+    {
+        u8g2_SetBitmapMode(&u8g2, 1);
+        u8g2_SetFontMode(&u8g2, 1);
+
+        // Draw Graph (x-Axis)
+        u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0, DISPLAY_FORMAT_GRAPH_PX_Y_0, DISPLAY_FORMAT_GRAPH_PX_X_1, DISPLAY_FORMAT_GRAPH_PX_Y_0);
+        u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_1, DISPLAY_FORMAT_GRAPH_PX_Y_0, DISPLAY_FORMAT_GRAPH_PX_X_1-4, DISPLAY_FORMAT_GRAPH_PX_Y_0-2);
+        u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_1, DISPLAY_FORMAT_GRAPH_PX_Y_0, DISPLAY_FORMAT_GRAPH_PX_X_1-4, DISPLAY_FORMAT_GRAPH_PX_Y_0+2);
+
+        // Draw Graph (x-Legend)
+        u8g2_SetFont(&u8g2, u8g2_font_4x6_tr);
+        u8g2_DrawStr(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_MARKER_0, DISPLAY_FORMAT_GRAPH_PX_Y_0+6, "-20");
+        u8g2_DrawStr(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_MARKER_1-5, DISPLAY_FORMAT_GRAPH_PX_Y_0+6, "-10");
+        u8g2_DrawStr(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_MARKER_2-5, DISPLAY_FORMAT_GRAPH_PX_Y_0+6, "0");
+        u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_MARKER_2, DISPLAY_FORMAT_GRAPH_PX_Y_0, DISPLAY_FORMAT_GRAPH_PX_X_MARKER_2, DISPLAY_FORMAT_GRAPH_PX_Y_1+10);
+
+        // Draw Graph (y-Axis)
+        u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0, DISPLAY_FORMAT_GRAPH_PX_Y_0, DISPLAY_FORMAT_GRAPH_PX_X_0, DISPLAY_FORMAT_GRAPH_PX_Y_1);
+        u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0, DISPLAY_FORMAT_GRAPH_PX_Y_1, DISPLAY_FORMAT_GRAPH_PX_X_0-2, DISPLAY_FORMAT_GRAPH_PX_Y_1+4);
+        u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0, DISPLAY_FORMAT_GRAPH_PX_Y_1, DISPLAY_FORMAT_GRAPH_PX_X_0+2, DISPLAY_FORMAT_GRAPH_PX_Y_1+4);
+
+        // Draw Graph (y-Legend)
+        u8g2_SetFont(&u8g2, u8g2_font_4x6_tr);
+        u8g2_DrawStr(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0-6, DISPLAY_FORMAT_GRAPH_PX_Y_MARKER_0+2, "0");
+        u8g2_DrawStr(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0-12, DISPLAY_FORMAT_GRAPH_PX_Y_MARKER_1+2, "200");
+        u8g2_DrawStr(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0-12, DISPLAY_FORMAT_GRAPH_PX_Y_MARKER_2+2, "400");
+
+        // Draw Graph (Data)
+        for (int i = 0; i < DISPLAY_FORMAT_GRAPH_DATA_SIZE-1; i++)
+        {
+            int n = (buffer_index + i) % DISPLAY_FORMAT_GRAPH_DATA_SIZE;
+            int n1 = (buffer_index + i + 1) % DISPLAY_FORMAT_GRAPH_DATA_SIZE;
+
+            int x0 = DISPLAY_FORMAT_GRAPH_PX_X_0 + (DISPLAY_FORMAT_GRAPH_PX_X_SIZE * i / DISPLAY_FORMAT_GRAPH_DATA_SIZE);
+            int y0 = DISPLAY_FORMAT_GRAPH_PX_Y_0 - (DISPLAY_FORMAT_GRAPH_PX_Y_SIZE * buffer[n] / DISPLAY_FORMAT_GRAPH_MAX_VALUE);
+            int x1 = DISPLAY_FORMAT_GRAPH_PX_X_0 + (DISPLAY_FORMAT_GRAPH_PX_X_SIZE * (i+1) / DISPLAY_FORMAT_GRAPH_DATA_SIZE);
+            int y1 = DISPLAY_FORMAT_GRAPH_PX_Y_0 - (DISPLAY_FORMAT_GRAPH_PX_Y_SIZE * buffer[n1] / DISPLAY_FORMAT_GRAPH_MAX_VALUE);
+
+            u8g2_DrawLine(&u8g2, x0, y0, x1, y1);
+        }
+
+    } while (u8g2_NextPage(&u8g2));
+}
