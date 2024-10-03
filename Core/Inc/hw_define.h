@@ -21,101 +21,112 @@ extern "C" {
 
 // ---  MAIN LOOP TIMER  ---
 // TIMER
-#define MAIN_LOOP_TIMER   TIM14
-#define MAIN_LOOP_TIMER_IRQn TIM14_IRQn
+#define TIM_MAIN_LOOP      TIM14
+#define TIM_MAIN_LOOP_IRQn TIM14_IRQn
 // TIMER IRQ Handler Remap
-#define MainLoopTimer_IRQHandler TIM14_IRQHandler
+#define TIM_MainLoop__IRQHandler TIM14_IRQHandler
 
 
 // ---   ENCODER   ---
 // GPIO
-#define ENCODER_A_PORT  GPIOA
-#define ENCODER_A_PIN   LL_GPIO_PIN_5
-#define ENCODER_B_PORT  GPIOA
-#define ENCODER_B_PIN   LL_GPIO_PIN_1
+#define PIN_ENCODER_A_PORT GPIOA
+#define PIN_ENCODER_A      LL_GPIO_PIN_5
+#define PIN_ENCODER_B_PORT GPIOA
+#define PIN_ENCODER_B      LL_GPIO_PIN_1
 // TIMER
-#define ENCODER_TIMER   TIM2
+#define TIM_ENCODER        TIM2
 
 // ---   WS2812B   ---
 #define WS2812B_LED_COUNT   3
 // GPIO
-#define WS2812B_PORT        GPIOA
-#define WS2812B_PIN         LL_GPIO_PIN_6
+#define PIN_WS2812B_PORT        GPIOA
+#define PIN_WS2812B             LL_GPIO_PIN_6
 // TIMER
-#define WS2812B_TIMER       TIM3
-#define WS2812B_TIMER_CHANNEL     LL_TIM_CHANNEL_CH1
-#define WS2812B_CCR_DMA_ADR (uint32_t)&(WS2812B_TIMER->CCR1)
+#define TIM_WS2812B             TIM3
+#define TIM_WS2812B_CHANNEL     LL_TIM_CHANNEL_CH1
+#define TIM_WS2812B_CCR_DMA_ADR (uint32_t)&(WS2812B_TIMER->CCR1)
 // DMA
-#define WS2812B_DMA         DMA1
-#define WS2812B_DMA_CHANNEL LL_DMA_CHANNEL_2
-#define WS2812B_DMA_REQUEST LL_DMAMUX_REQ_TIM3_CH1
-#define WS2812B_DMA_IRQn    DMA1_Channel2_3_IRQn
+#define DMA_WS2812B         DMA1
+#define DMA_WS2812B_CHANNEL LL_DMA_CHANNEL_2
+#define DMA_WS2812B_REQUEST LL_DMAMUX_REQ_TIM3_CH1
+#define DMA_WS2812B_IRQn    DMA1_Channel2_3_IRQn
 // DMA IRQ Handler Remap
-#define WS2812B_DMA_IRQHandler DMA1_Channel2_3_IRQHandler
+#define DMA_WS2812B__IRQHandler DMA1_Channel2_3_IRQHandler
 
 // ---   BUTTON   ---
 // GPIO
-#define BUTTON_ENCODER_PORT GPIOA
-#define BUTTON_ENCODER_PIN  LL_GPIO_PIN_0
-#define BUTTON_BLUE_PORT    GPIOA
-#define BUTTON_BLUE_PIN     LL_GPIO_PIN_1
-#define BUTTON_RED_PORT     GPIOA
-#define BUTTON_RED_PIN      LL_GPIO_PIN_2
+#define PIN_BUTTON_ENCODER_PORT GPIOD
+#define PIN_BUTTON_ENCODER      LL_GPIO_PIN_0
+#define PIN_BUTTON_BLUE_PORT    GPIOD
+#define PIN_BUTTON_BLUE         LL_GPIO_PIN_1
+#define PIN_BUTTON_RED_PORT     GPIOD
+#define PIN_BUTTON_RED          LL_GPIO_PIN_2
+
+
+// ---  SPI   ---
+// GPIO
+#define PIN_SPI_SCK_PORT   GPIOA
+#define PIN_SPI_SCK        LL_GPIO_PIN_0
+#define PIN_SPI_MISO_PORT  GPIOD
+#define PIN_SPI_MISO       LL_GPIO_PIN_3
+#define PIN_SPI_MOSI_PORT  GPIOB
+#define PIN_SPI_MOSI       LL_GPIO_PIN_15
+// SPI
+#define SPI                SPI2
+
 
 // ---   TEMP SENSOR   ---
 // GPIO
-#define TEMP_SPI_SCK_PORT   GPIOA
-#define TEMP_SPI_SCK_PIN    LL_GPIO_PIN_0
-#define TEMP_SPI_MISO_PORT  GPIOD
-#define TEMP_SPI_MISO_PIN   LL_GPIO_PIN_3
-#define TEMP_SPI_CS_PORT    GPIOB
-#define TEMP_SPI_CS_PIN     LL_GPIO_PIN_6
-// SPI
-#define TEMP_SPI            SPI2
+#define PIN_SPI_TEMP_CS_PORT    GPIOB
+#define PIN_SPI_TEMP_CS         LL_GPIO_PIN_6
+
+
+// ---  I2C   ---
+// GPIO
+#define PIN_I2C_SCL_PORT   GPIOB
+#define PIN_I2C_SCL        LL_GPIO_PIN_8
+#define PIN_I2C_SDA_PORT   GPIOB
+#define PIN_I2C_SDA        LL_GPIO_PIN_7
+// I2C
+#define I2C                I2C1
 
 // ---   DISPLAY   ---
-// GPIO
-#define DISP_I2C_SCL_PORT   GPIOB
-#define DISP_I2C_SCL_PIN    LL_GPIO_PIN_8
-#define DISP_I2C_SDA_PORT   GPIOB
-#define DISP_I2C_SDA_PIN    LL_GPIO_PIN_7
 // I2C
-#define DISP_I2C            I2C1
-#define DISP_I2C_ADDR       0x3C
+#define I2C_DISP_ADDR       0x3C
 
 // ---   POWER   ---
 // GPIO
-#define PWR_TRIAC_EN_PORT   GPIOA
-#define PWR_TRIAC_EN_PIN    LL_GPIO_PIN_8
-#define PWR_ZERO_IN_PORT    GPIOA
-#define PWR_ZERO_IN_PIN     LL_GPIO_PIN_12
-#define STATION_SENS_PORT   GPIOB
-#define STATION_SENS_PIN    LL_GPIO_PIN_15
+#define PIN_PWR_TRIAC_EN_PORT   GPIOA
+#define PIN_PWR_TRIAC_EN        LL_GPIO_PIN_8
+#define PIN_PWR_ZERO_IN_PORT    GPIOA
+#define PIN_PWR_ZERO_IN         LL_GPIO_PIN_12
+#define PIN_STATION_SENS_PORT   GPIOB
+#define PIN_STATION_SENS        LL_GPIO_PIN_15
 // TIMER
-#define PWR_TIMER           TIM1
-#define PWR_TIMER_CHANNEL   LL_TIM_CHANNEL_CH1
+#define TIM_PWR           TIM1
+#define TIM_PWR_CHANNEL   LL_TIM_CHANNEL_CH1
 
 // ---   SERIAL UI   ---
 // GPIO
-#define SER_UI_RX_TX_PORT   GPIOA
-#define SER_UI_TX_PIN       LL_GPIO_PIN_2
-#define SER_UI_RX_PIN       LL_GPIO_PIN_3
+#define PIN_SER_UI_RX_TX_PORT   GPIOA
+#define PIN_SER_UI_TX       LL_GPIO_PIN_2
+#define PIN_SER_UI_RX       LL_GPIO_PIN_3
 
 // UART
-#define SER_UI_UART            USART2
-#define SER_UI_UART_BAUDRATE   115200
-#define SER_UI_UART_IRQn       USART2_IRQn
+#define UART_SER_UI            USART2
+#define UART_SER_UI_BAUDRATE   115200
+#define UART_SER_UI_IRQn       USART2_IRQn
 // UART IRQ Handler Remap
-#define Ser_Ui_USART_IRQHandler USART2_IRQHandler
+#define UART_Ser_Ui__IRQHandler USART2_IRQHandler
 
 // DMA
-#define SER_UI_DMA                DMA1
-#define SER_UI_DMA_RX_CHANNEL     LL_DMA_CHANNEL_1
-#define SER_UI_DMA_RX_BUFFER_SIZE 64
-#define SER_UI_DMA_RX_REQUEST     LL_DMAMUX_REQ_USART2_RX
-#define SER_UI_DMA_IRQn           DMA1_Channel1_IRQn
+#define DMA_SER_UI                DMA1
+#define DMA_SER_UI_RX_CHANNEL     LL_DMA_CHANNEL_1
+#define DMA_SER_UI_RX_BUFFER_SIZE 64
+#define DMA_SER_UI_RX_REQUEST     LL_DMAMUX_REQ_USART2_RX
+#define DMA_SER_UI_IRQn           DMA1_Channel1_IRQn
 // DMA IRQ Handler Remap
-#define Ser_Ui_DMA_IRQHandler     DMA1_Channel1_IRQHandler
+#define DMA_Ser_Ui__IRQHandler     DMA1_Channel1_IRQHandler
 
 
 #ifdef __cplusplus
