@@ -1,61 +1,15 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
+
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "gpio.h"
+#include "encoder.h"
+#include "ser_ui.h"
+#include "display.h"
+#include "temperature.h"
+#include "ws2812b.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+#include <stdio.h>
 
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
@@ -63,126 +17,119 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+    /* MCU Configuration--------------------------------------------------------*/
 
-  /* USER CODE BEGIN 1 */
+    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 
-  /* USER CODE END 1 */
+    LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
-  /* MCU Configuration--------------------------------------------------------*/
+    /* SysTick_IRQn interrupt configuration */
+    // NVIC_SetPriority(SysTick_IRQn, 3);   // SysTick_ISR not used in this project
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
-  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+    /** Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral */
+    LL_SYSCFG_DisableDBATT(LL_SYSCFG_UCPD1_STROBE | LL_SYSCFG_UCPD2_STROBE);
 
-  /* SysTick_IRQn interrupt configuration */
-  NVIC_SetPriority(SysTick_IRQn, 3);
+    /* Configure the system clock */
+    SystemClock_Config();
 
-  /** Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral
-  */
-  LL_SYSCFG_DisableDBATT(LL_SYSCFG_UCPD1_STROBE | LL_SYSCFG_UCPD2_STROBE);
+    LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_PCLK1);
+    LL_RCC_SetTIMClockSource(LL_RCC_TIM1_CLKSOURCE_PCLK1);
 
-  /* USER CODE BEGIN Init */
+    /* Peripherals clock enable */
+    LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM2);
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
+    LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM14);
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_USART2);
+    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_I2C1);
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_SPI2);
+    LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
+    LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
+    LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOD);
 
-  /* USER CODE END Init */
+    /* Configure and Initialize Hardware Peripherals */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+    /* DMA */
+    DMA_Ser_Ui__Init();
+    DMA_WS2812B__Init();
 
-  /* USER CODE BEGIN SysInit */
+    /* GPIO */
+    GPIO_Button__Init();
 
-  /* USER CODE END SysInit */
+    /* I2C */
+    I2C__Init();
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  /* USER CODE BEGIN 2 */
+    /* SPI */
+    SPI__Init();
 
-  /* USER CODE END 2 */
+    /* TIM */
+    TIM_Encoder__Init();
+    TIM_WS2812B__Init();
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+    /* USART */
+    USART_Ser_Ui__Init();
 
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+
+    /* Enable Serial UI DMA */
+    DMA_Ser_Ui__Enable();
+
+    /* Init Display */
+    Display_Init();
+
+    /* Configure MainloopTick */
+    MainLoopTimer_Config(10);  // 10Hz = 100ms
+
+    /* Infinite loop */
+    while (1)
+    {
+    }
 }
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
-void SystemClock_Config(void)
-{
-  LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
-  while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_2)
-  {
-  }
+void MainLoopTimer_IRQHandler(void){
+    static uint32_t counter = 0;
+    static uint32_t temperature = 0;
 
-  /* HSE configuration and activation */
-  LL_RCC_HSE_EnableBypass();
-  LL_RCC_HSE_Enable();
-  while(LL_RCC_HSE_IsReady() != 1)
-  {
-  }
+    /* Clear the update interrupt flag */
+    LL_TIM_ClearFlag_UPDATE(TIM_MAIN_LOOP);
 
-  /* Main PLL configuration and activation */
-  LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_1, 8, LL_RCC_PLLR_DIV_2);
-  LL_RCC_PLL_Enable();
-  LL_RCC_PLL_EnableDomain_SYS();
-  while(LL_RCC_PLL_IsReady() != 1)
-  {
-  }
+    /* Get Encoder Counter */
+    int encoder = Encoder_GetCounter();
 
-  /* Set AHB prescaler*/
-  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+    /* Get Temperature */
+    switch (counter)
+    {
+    case 0:
+        Temperature_StartConversion();
+        break;
+    case 3:
+        temperature = Temperature_Read();
+        temperature = Temperature_Convert_Celsius(temperature);
+        break;
+    default:
+        break;
+    }
+    
+    WS2812B_SetColor(0, 0, 0, counter*25);
+    WS2812B_SetColor(1, 0, counter*25, 0);
+    WS2812B_SetColor(2, counter*25, 0, 0);
 
-  /* Sysclk activation on the main PLL */
-  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
-  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL)
-  {
-  }
+    WS2812B_UpdateLEDs();
+    
+    /* Send data to serial interface */
+    USART_Ser_Ui__Tx_Blocking((uint8_t *)"Counter: ", 9);
+    static char buffer[10];
+    sprintf(buffer, "%i \n", encoder);
+    USART_Ser_Ui__Tx_Blocking((uint8_t *)buffer, 9);
+    
+    /* Display */
+    //Display_Render_Test(temperature);
+    Display_Render_Main();
 
-  /* Set APB1 prescaler*/
-  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
-  LL_Init1msTick(64000000);
-  /* Update CMSIS variable (which can be updated also through SystemCoreClockUpdate function) */
-  LL_SetSystemCoreClock(64000000);
+    /* Increment counter */
+    counter++;
+    if(counter > 10){
+        counter = 0;
+    }
 }
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
-  /* USER CODE END Error_Handler_Debug */
-}
-
-#ifdef  USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line)
-{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */
