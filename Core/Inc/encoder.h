@@ -23,6 +23,8 @@ extern "C" {
 void Encoder_SetMinMax(int16_t min, int16_t max);
 void Encoder_SetCounter(int16_t value);
 int16_t Encoder_GetCounter(void);
+int16_t Encoder_ResetAndGetDelta(void);
+int16_t Encoder_ResetAndGetDelta_Acel(void);
 
 #ifdef __cplusplus
 }
