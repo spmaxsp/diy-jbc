@@ -102,9 +102,14 @@ extern "C" {
 #define PIN_PWR_ZERO_IN         LL_GPIO_PIN_12
 #define PIN_STATION_SENS_PORT   GPIOB
 #define PIN_STATION_SENS        LL_GPIO_PIN_15
-// TIMER
-#define TIM_PWR           TIM1
-#define TIM_PWR_CHANNEL   LL_TIM_CHANNEL_CH1
+// EXTI
+#define EXTI_PWR_ZC_CONFIG_LINE LL_EXTI_CONFIG_LINE12
+#define EXTI_PWR_ZC_CONFIG_PORT LL_EXTI_CONFIG_PORTA
+#define EXTI_PWR_ZC_LINE        LL_EXTI_LINE_12
+#define EXTI_PWR_ZC_IRQn        EXTI4_15_IRQn
+
+// EXTI IRQ Handler Remap
+#define GPIO_PWR_ZC__IRQHandler EXTI4_15_IRQHandler
 
 // ---   SERIAL UI   ---
 // GPIO
