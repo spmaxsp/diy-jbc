@@ -26,7 +26,7 @@ extern "C" {
 void SystemClock_Config(void);
 
 void MainLoopTimer_Config(uint32_t period_Hz);
-void MainLoopTimer_IRQHandler(void);
+void TIM_MainLoop__IRQHandler(void);
 
 #ifdef __cplusplus
 }

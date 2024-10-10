@@ -2,13 +2,18 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "eeprom.h"
 #include "encoder.h"
 #include "ser_ui.h"
+#include "settings.h"
 #include "display.h"
 #include "temperature.h"
 #include "ws2812b.h"
+#include "pwr_ctrl.h"
 
 #include <stdio.h>
+
+settings_t settings;
 
 
 /**
@@ -57,15 +62,19 @@ int main(void)
 
     /* GPIO */
     GPIO_Button__Init();
+    GPIO_PWR__Init();
 
     /* I2C */
     I2C__Init();
+    /* Init Display */
+    Display_Init();
 
     /* SPI */
     SPI__Init();
 
     /* TIM */
     TIM_Encoder__Init();
+    TIM_Encoder__Enable();
     TIM_WS2812B__Init();
 
     /* USART */
@@ -75,11 +84,12 @@ int main(void)
     /* Enable Serial UI DMA */
     DMA_Ser_Ui__Enable();
 
-    /* Init Display */
-    Display_Init();
-
     /* Configure MainloopTick */
     MainLoopTimer_Config(10);  // 10Hz = 100ms
+
+
+    /* EEPROM */
+    Recover_from_EEPROM();
 
     /* Infinite loop */
     while (1)
@@ -87,7 +97,7 @@ int main(void)
     }
 }
 
-void MainLoopTimer_IRQHandler(void){
+void TIM_MainLoop__IRQHandler(void){
     static uint32_t counter = 0;
     static uint32_t temperature = 0;
 
@@ -95,7 +105,7 @@ void MainLoopTimer_IRQHandler(void){
     LL_TIM_ClearFlag_UPDATE(TIM_MAIN_LOOP);
 
     /* Get Encoder Counter */
-    int encoder = Encoder_GetCounter();
+    //int encoder = Encoder_GetCounter();
 
     /* Get Temperature */
     switch (counter)
@@ -118,10 +128,10 @@ void MainLoopTimer_IRQHandler(void){
     WS2812B_UpdateLEDs();
     
     /* Send data to serial interface */
-    USART_Ser_Ui__Tx_Blocking((uint8_t *)"Counter: ", 9);
-    static char buffer[10];
-    sprintf(buffer, "%i \n", encoder);
-    USART_Ser_Ui__Tx_Blocking((uint8_t *)buffer, 9);
+    //USART_Ser_Ui__Tx_Blocking((uint8_t *)"Counter: ", 9);
+    //static char buffer[10];
+    //sprintf(buffer, "%i \n", encoder);
+    //USART_Ser_Ui__Tx_Blocking((uint8_t *)buffer, 9);
     
     /* Display */
     //Display_Render_Test(temperature);
