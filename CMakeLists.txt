@@ -45,6 +45,7 @@ set(sources_SRCS
     ${PROJ_PATH}/Core/Hardware/Src/dma_ser_ui.c 
     ${PROJ_PATH}/Core/Hardware/Src/dma_ws2812b.c 
     ${PROJ_PATH}/Core/Hardware/Src/gpio_button.c
+    ${PROJ_PATH}/Core/Hardware/Src/gpio_pwr.c
     ${PROJ_PATH}/Core/Hardware/Src/i2c.c 
     ${PROJ_PATH}/Core/Hardware/Src/spi.c 
     ${PROJ_PATH}/Core/Hardware/Src/tim_encoder.c 
@@ -58,12 +59,16 @@ set(sources_SRCS
     
     ${PROJ_PATH}/Core/Src/encoder.c
 
+    ${PROJ_PATH}/Core/Src/eeprom.c
+
     ${PROJ_PATH}/Core/Src/display.c
     ${PROJ_PATH}/Core/Src/display_s_graph.c
     ${PROJ_PATH}/Core/Src/display_s_menu.c
     ${PROJ_PATH}/Core/Src/display_s_main.c
 
     ${PROJ_PATH}/Core/Src/ser_ui.c
+    ${PROJ_PATH}/Core/Src/settings.c
+    ${PROJ_PATH}/Core/Src/pwr_ctrl.c
     ${PROJ_PATH}/Core/Src/temperature.c
     ${PROJ_PATH}/Core/Src/ws2812b.c
 
