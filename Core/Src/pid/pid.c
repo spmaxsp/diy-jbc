@@ -4,13 +4,38 @@
 
 void pid_init(struct s_pid_ctl *pid, float K_r, float T_N, float T_v, float T, float min, float max){
     pid->kp = K_r;
+
+    pid->tn = T_N;
+    pid->tv = T_v;
+    pid->t = T;
+
     pid->ki = K_r * T / T_N;
     pid->kd = K_r * T_v / T;
+
     pid->max = max;
     pid->min = min;
+
     pid->e_1 = 0;
     pid->y_i1 = 0;
 }
+
+void pid_update_parameters(struct s_pid_ctl *pid, float K_r, float T_N, float T_v){
+    pid->kp = K_r;
+
+    pid->tn = T_N;
+    pid->tv = T_v;
+
+    pid->ki = K_r * pid->t / T_N;
+    pid->kd = K_r * T_v / pid->t;
+}
+
+void pid_update_process_time(struct s_pid_ctl *pid, float T){
+    pid->t = T;
+
+    pid->ki = pid->kp * T / pid->tn;
+    pid->kd = pid->kp * pid->tv / T;
+}
+
 
 float pid_calc(struct s_pid_ctl *pid, float setpoint, float value){
     const float i_max = 1000;

@@ -7,10 +7,17 @@ extern "C" {
 
 struct s_pid_ctl {
     float kp;
+
+    float tn;
+    float tv;
+    float t;
+
     float ki;
     float kd;
+
     float max;
     float min;
+    
     float e_1;
     float y_i1;
 };
