@@ -3,7 +3,15 @@
 
 extern u8g2_t u8g2;
 
+extern enum { MAIN_SCREEN, MENU_SCREEN, PLOT_SCREEN } main_screen;
+
 void Display_Render_Screen_Main(void){
+
+    if (GPIO_Button_Encoder__GetState())   { main_screen = MENU_SCREEN;
+                                                Encoder_SetCounter(0); }
+    else if (GPIO_Button_Blue__GetState()) { main_screen = PLOT_SCREEN; }
+    else if (GPIO_Button_Red__GetState())  { } // TODO: Set Temperature to 0
+
     u8g2_FirstPage(&u8g2);
     do
     {

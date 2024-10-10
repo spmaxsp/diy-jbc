@@ -18,6 +18,7 @@ extern "C" {
 // Hardware
 #include "i2c.h"
 #include "gpio_button.h"
+#include "encoder.h"
 
 // Display Library
 #include "u8g2.h"

@@ -24,13 +24,34 @@ void GPIO_Button__Init(void){
 }
 
 uint8_t GPIO_Button_Encoder__GetState(void){
-    return !(LL_GPIO_IsInputPinSet(PIN_BUTTON_ENCODER_PORT, PIN_BUTTON_ENCODER));
+    static uint8_t last_state;
+    uint8_t current_state = !(LL_GPIO_IsInputPinSet(PIN_BUTTON_ENCODER_PORT, PIN_BUTTON_ENCODER));
+    if (current_state != last_state && current_state == 1){
+        last_state = current_state;
+        return 1;
+    }
+    last_state = current_state;
+    return 0;
 }
 
 uint8_t GPIO_Button_Blue__GetState(void){
-    return !(LL_GPIO_IsInputPinSet(PIN_BUTTON_BLUE_PORT, PIN_BUTTON_BLUE));
+    static uint8_t last_state;
+    uint8_t current_state = !(LL_GPIO_IsInputPinSet(PIN_BUTTON_BLUE_PORT, PIN_BUTTON_BLUE));
+    if (current_state != last_state && current_state == 1){
+        last_state = current_state;
+        return 1;
+    }
+    last_state = current_state;
+    return 0;
 }
 
 uint8_t GPIO_Button_Red__GetState(void){
-    return !(LL_GPIO_IsInputPinSet(PIN_BUTTON_RED_PORT, PIN_BUTTON_RED));
+    static uint8_t last_state;
+    uint8_t current_state = !(LL_GPIO_IsInputPinSet(PIN_BUTTON_RED_PORT, PIN_BUTTON_RED));
+    if (current_state != last_state && current_state == 1){
+        last_state = current_state;
+        return 1;
+    }
+    last_state = current_state;
+    return 0;
 }

@@ -17,34 +17,19 @@ void Display_Init(void)
     u8g2_SendBuffer(&u8g2);
 }
 
+enum { MAIN_SCREEN, MENU_SCREEN, PLOT_SCREEN } main_screen;
+enum { MENU_MAIN, MENU_PID, MENU_TEMP_CAL, MENU_SUSP_HIBR } settings_screen;
 
 void Display_Render_Main(void)
 {
-    static enum { MAIN_SCREEN, MENU_SCREEN, PLOT_SCREEN } screen = PLOT_SCREEN;
-
-    // setup encoder
-
-
-    // handle input
-    if (Button_Blue_GetState()){
-        screen = MENU_SCREEN;
-    }
-    else if (Button_Red_GetState()){
-        screen = MAIN_SCREEN;
-    }
-    else if (Button_Encoder_GetState()){
-        screen = PLOT_SCREEN;
-    }
-
-
     // render screens
-    switch (screen)
+    switch (main_screen)
     {
     case MAIN_SCREEN:
         Display_Render_Screen_Main();
         break;
     case MENU_SCREEN:
-        Display_Render_Screen_Menu();
+        Display_Handle_Screen_Menu();
         break;
     case PLOT_SCREEN:
         Display_Render_Screen_Plot();

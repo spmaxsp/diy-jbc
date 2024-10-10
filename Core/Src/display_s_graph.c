@@ -25,7 +25,14 @@ extern u8g2_t u8g2;
 
 #define DISPLAY_FORMAT_GRAPH_DATA_SIZE  20 // 20 Data Points (20s)
 
+
+extern enum { MAIN_SCREEN, MENU_SCREEN, PLOT_SCREEN } main_screen;
+
 void Display_Render_Screen_Plot(void){
+
+    if (GPIO_Button_Encoder__GetState())   { main_screen = MAIN_SCREEN; }
+    else if (GPIO_Button_Blue__GetState()) { main_screen = MAIN_SCREEN; }
+    else if (GPIO_Button_Red__GetState())  { main_screen = MAIN_SCREEN; }
 
     static float tmp_counter = 1.0;
 
@@ -54,6 +61,8 @@ void Display_Render_Screen_Plot(void){
     {
         u8g2_SetBitmapMode(&u8g2, 1);
         u8g2_SetFontMode(&u8g2, 1);
+
+        u8g2_SetDrawColor(&u8g2, 1);
 
         // Draw Graph (x-Axis)
         u8g2_DrawLine(&u8g2, DISPLAY_FORMAT_GRAPH_PX_X_0, DISPLAY_FORMAT_GRAPH_PX_Y_0, DISPLAY_FORMAT_GRAPH_PX_X_1, DISPLAY_FORMAT_GRAPH_PX_Y_0);
